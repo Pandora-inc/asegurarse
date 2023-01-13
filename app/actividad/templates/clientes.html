@@ -1,0 +1,39 @@
+{% extends "base-actividad.html" %}
+
+{% block title %} Clientes {% endblock %}
+{% block listado %} Clientes {% endblock %}
+
+{% block body %}
+  <div class="container py-5">
+    <div class="row">
+      <table id="listado" class="table table-striped" width="100%">
+        <thead>
+          <tr>
+            <th scope="col">Codigo</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Direccion</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cliente in lista_clientes %}
+          <tr>
+            <td>{{cliente.id}}</td>
+            <td>{{cliente.nombre}}</td>
+            <td>{{cliente.direccion}}</td>
+            <td>
+              <button type="button" class="btn btn-primary"><i class="fa fa-eye"></i></button>
+              <button type="button" class="btn btn-success"><i class="fa fa-edit"></i></button>
+              <button type="button" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p></p>
+      <a class="btn btn-secondary btn-lg disabled" href="#" role="button">Agregar Cliente</a>
+      <p></p>
+      <a class="btn btn-success btn-lg btn-block" href="/actividad/" role="button">Salir</a>
+    </div>
+  </div>
+{% endblock %}

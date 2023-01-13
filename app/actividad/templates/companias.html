@@ -1,0 +1,37 @@
+{% extends "base-actividad.html" %}
+
+{% block title %} Compa&ntilde;&iacute;as {% endblock %}
+{% block listado %} Compa&ntilde;&iacute;as {% endblock %}
+
+{% block body %}
+  <div class="container py-5">
+    <div class="row">
+      <table id="listado" class="table table-striped" width="100%">
+        <thead>
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Direccion</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for compania in companias %}
+          <tr>
+<!--            <td>{{cliente.id}}</td>-->
+            <td>{{compania.nombre}}</td>
+            <td>{{compania.direccion}}</td>
+            <td>
+              <a href="{% url 'actividad:editarcompania' compania.id %}" class="btn btn-primary">Editar</a>
+              <a href="{% url 'actividad:eliminarcompania' compania.id %}" class="btn btn-danger">Eliminar</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p></p>
+     <a class="btn btn-success btn-lg" href="{% url 'actividad:agregarcompania' %}" role="button">Agregar Compa&ntilde;&iacute;a</a>
+      <p></p>
+      <a class="btn btn-success btn-lg btn-block" href="/actividad/" role="button">Salir</a>
+    </div>
+  </div>
+{% endblock %}

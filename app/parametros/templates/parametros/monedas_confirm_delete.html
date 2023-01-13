@@ -1,0 +1,14 @@
+{% extends 'base-parametros.html' %}
+{% block titulo %}
+  Confirmación de Eliminación
+{% endblock titulo %}
+
+{% block body %}
+<form method="POST">
+  {% csrf_token %}
+  <p><strong>¿Desea eliminar la moneda {{ object }}?</strong></p>
+  <button type="submit" class="btn btn-danger">Confirmar</button>
+  <a name="" id="" class="btn btn-primary" href="{{request.META.HTTP_REFERER}}" role="button">Cancelar</a>
+</form>
+
+{% endblock body %}

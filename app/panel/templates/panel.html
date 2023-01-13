@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %} Panel de Control {% endblock %}
+{% block maintitle %} Panel de Control {% endblock %}
+
+{% block body1 %}
+<a class="btn btn-success btn-sm" href="/actividad/clientes/" role="button">Clientes</a>
+<a class="btn btn-success btn-sm" href="/actividad/ordenes/" role="button">Ordenes</a>
+<a class="btn btn-secondary btn-sm disabled" href="#" role="button">Polizas</a>
+<a class="btn btn-secondary btn-sm disabled" href="#" role="button">Comprobantes</a>
+<a class="btn btn-secondary btn-sm disabled" href="#" role="button">Cheques</a>
+<a class="btn btn-secondary btn-sm disabled" href="#" role="button">Rendiciones</a>
+<a class="btn btn-secondary btn-sm disabled" href="#" role="button">Libros Rubricados</a>
+<a class="btn btn-success btn-sm" href="/actividad/companias" role="button">Compañías</a>
+<a class="btn btn-success btn-sm" href="/actividad/secciones" role="button">Secciones</a>
+<a class="btn btn-success btn-sm" href="/actividad/productores" role="button">Productores</a>
+{% endblock %}
+
+{% block body2 %}
+<a class="btn btn-secondary btn-sm disabled" href="#" role="button">Vencim. Polizas</a>
+<a class="btn btn-secondary btn-sm disabled" href="#" role="button">Polizas por Cliente</a>
+{% endblock %}
+
+{% block body3 %}
+<a class="btn btn-success btn-sm" href="/parametros/bancos" role="button">Bancos</a>
+<a class="btn btn-success btn-sm" href="/parametros/postal" role="button">Postal</a>
+<a class="btn btn-success btn-sm" href="/parametros/monedas" role="button">Monedas</a>
+<a class="btn btn-success btn-sm" href="/parametros/tipospedido" role="button">Tipos de Pedido</a>
+<a class="btn btn-success btn-sm" href="/parametros/tipospoliza" role="button">Tipos de Poliza</a>
+<a class="btn btn-success btn-sm" href="/parametros/mediosdepago" role="button">Medios de Pago</a>
+{% endblock %}
+
+{% block body4 %}
+<a class="btn btn-secondary btn-sm disabled" href="#" role="button">Actualizar</a>
+{% endblock %}
+
+{% block body5 %}
+<a class="btn btn-secondary btn-sm disabled" href="#" role="button">Hacer Backup</a>
+<a class="btn btn-secondary btn-sm disabled" href="#" role="button">Recuperar Backup</a>
+{% endblock %}

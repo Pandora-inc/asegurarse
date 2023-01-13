@@ -1,0 +1,47 @@
+{% extends "base-actividad2.html" %}
+
+{% block title %} Ordenes {% endblock %}
+{% block listado %} Ordenes {% endblock %}
+
+{% block table %}
+
+      <table id="listado" class="table table-striped" width="100%">
+        <thead>
+          <tr>
+            <th scope="col">Orden</th>
+            <th scope="col">Orden Prod</th>
+            <th scope="col">Vig.Desde</th>
+            <th scope="col">Vig.Hasta</th>
+            <th scope="col">Compañía</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Productor</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for orden in ordenes %}
+          <tr>
+            <td>{{orden.numero}}</td>
+            <td>{{orden.orden_productor}}</td>
+            <td>{{orden.vigencia_desde|date:"d/M/y"}}</td>
+            <td>{{orden.vigencia_hasta|date:"d/M/y"}}</td>
+            <td>{{orden.compania}}</td>
+            <td>{{orden.cliente}}</td>
+            <td>{{orden.productor}}</td>
+            <td>
+              <a href="#" class="btn btn-primary">Editar</a>
+              <a href="#" class="btn btn-danger">Borrar</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+{% endblock %}
+{% block buttons %}
+      <p></p>
+      <div class="pagination justify-content-center">
+      <a class="btn btn-secondary btn-lg disabled" href="#" role="button">Agregar Orden</a>
+      <a class="btn btn-success btn-lg btn-block" href="/actividad/" role="button">Salir</a>
+      </div>
+{% endblock %}
+

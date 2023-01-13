@@ -1,0 +1,42 @@
+{% extends "editor/form.html" %}
+
+{% block title %} Editar Compañía {% endblock %}
+{% block listado %} Editar Compañía {% endblock %}
+
+{% block action %}Actualizar{% endblock action %}
+
+{% block form %}
+    <table class="table">
+        <tr>
+           <th scope="row">{{ form.nombre.label }}: {{ form.nombre }}</th>
+          <td><b>CUIL/T</b></td>
+        </tr>
+        <tr>
+           <th scope="row">{{ form.razon_social.label }}: {{ form.razon_social }}</th>
+          <td>{{ form.cuit }}</td>
+        </tr>
+        <tr>
+           <th scope="row">{{ form.direccion.label }}: {{ form.direccion }}</th>
+           <th scope="row">{{ form.telefonos.label }}: {{ form.telefonos }}</th>
+        </tr>
+        <tr>
+           <th scope="row">{{ form.productor.label }}: {{ form.productor }}</th>
+           <th scope="row" aria-disabled="true">Organizador: <input type="text" disabled></input></th>
+        </tr>
+        <tr>
+           <th scope="row">{{ form.dias_primer_cuota.label }}: {{ form.dias_primer_cuota }}</th>
+           <th scope="row">{{ form.prop_iva }} {{ form.prop_iva.label }}</th>
+        </tr>
+        <tr>
+           <th scope="row">{{ form.liquidaciones.label }}: {{ form.liquidaciones }}</th>
+           <th scope="row">{{ form.agente_iva }} {{ form.agente_iva.label }}</th>
+        </tr>
+        <tr>
+           <th scope="row">Ing. Brutos s/Comisiones<br>
+           {{ form.ib_comis_prod }} {{ form.ib_comis_prod.label }}<br>
+           {{ form.ib_comis_cobr }} {{ form.ib_comis_cobr.label }}
+           </th>
+           <th scope="row">{{ form.comis_con_iva }} {{ form.comis_con_iva.label }}</th>
+        </tr>
+    </table>
+{% endblock %}

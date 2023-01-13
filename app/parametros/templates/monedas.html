@@ -1,0 +1,38 @@
+{% extends "base-parametros.html" %}
+
+{% block title %} Monedas {% endblock %}
+{% block listado %} Monedas {% endblock %}
+
+{% block body %}
+  <div class="container py-5">
+    <div class="row">
+      <table id="listado" class="table table-striped" width="100%">
+        <thead>
+          <tr>
+            <th scope="col">Moneda</th>
+            <th scope="col">Simbolo</th>
+            <th scope="col">Cambio</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for moneda in monedas %}
+          <tr>
+            <td>{{moneda.nombre}}</td>
+            <td>{{moneda.simbolo}}</td>
+            <td>{{moneda.cambio}}</td>
+            <td>
+              <a href="{% url 'parametros:editarmoneda' moneda.id %}" class="btn btn-primary">Editar</a>
+              <a href="{% url 'parametros:eliminarmoneda' moneda.id %}" class="btn btn-danger">Eliminar</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p></p>
+      <a class="btn btn-success btn-lg" href="{% url 'parametros:agregarmoneda' %}" role="button">Agregar Moneda</a>
+      <p></p>
+      <a class="btn btn-success btn-lg btn-block" href="/parametros/" role="button">Salir</a>
+    </div>
+  </div>
+{% endblock %}

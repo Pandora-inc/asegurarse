@@ -1,0 +1,40 @@
+# Use root/mysql as user/password credentials
+
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: prueba-web
+    command: gunicorn asegurarse.wsgi:application --bind 0.0.0.0:8000
+    restart: always
+    volumes:
+      - ./app/:/usr/src/app/
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env.dev
+    hostname: web
+  
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - ./asegurarse_init_db.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_volume:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=hello_django
+      - POSTGRES_PASSWORD=hello_django
+      - POSTGRES_DB=hello_django_dev
+
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    hostname: adminer
+
+volumes:
+  db_volume:

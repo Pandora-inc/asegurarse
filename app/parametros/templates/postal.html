@@ -1,0 +1,36 @@
+{% extends "base-parametros2.html" %}
+
+{% block title %} Datos Postales {% endblock %}
+{% block listado %} Datos Postales {% endblock %}
+
+{% block table %}
+    <table id="listado" class="table table-striped" width="100%">
+      <thead>
+        <tr>
+          <th scope="col">CP</th>
+          <th scope="col">Referencia</th>
+          <th scope="col">Provincia</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for postal in postales %}
+        <tr>
+          <td>{{postal.cp}}</td>
+          <td>{{postal.referencia}}</td>
+          <td>{{postal.provincia}}</td>
+          <td>
+            <a href="{% url 'parametros:editarpostal' postal.id %}" class="btn btn-primary">Editar</a>
+            <a href="{% url 'parametros:eliminarpostal' postal.id %}" class="btn btn-danger">Eliminar</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endblock %}
+  {% block buttons %}
+    <p></p>
+    <a class="btn btn-success btn-lg" href="{% url 'parametros:agregarpostal' %}" role="button">Agregar CP</a>
+    <p></p>
+    <a class="btn btn-success btn-lg btn-block" href="/parametros/" role="button">Salir</a>
+  {% endblock %}

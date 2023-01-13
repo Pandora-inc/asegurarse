@@ -1,0 +1,34 @@
+{% extends "base-parametros.html" %}
+
+{% block title %} Tipos de Pedido {% endblock %}
+{% block listado %} Tipos de Pedido {% endblock %}
+
+{% block body %}
+  <div class="card">
+    <div class="row">
+      <table id="listado" class="table table-striped" width="100%">
+        <thead>
+          <tr>
+            <th scope="col">Tipo de Pedido</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for tipopedido in tipospedidos %}
+          <tr>
+            <td>{{tipopedido.nombre}}</td>
+            <td>
+              <a href="{% url 'parametros:editartipopedido' tipopedido.id %}" class="btn btn-primary">Editar</a>
+              <a href="{% url 'parametros:eliminartipopedido' tipopedido.id %}" class="btn btn-danger">Eliminar</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p></p>
+      <a class="btn btn-success btn-lg" href="{% url 'parametros:agregartipopedido' %}" role="button">Agregar Tipo de Pedido</a>
+      <p></p>
+      <a class="btn btn-success btn-lg btn-block" href="/parametros/" role="button">Salir</a>
+    </div>
+  </div>
+{% endblock %}

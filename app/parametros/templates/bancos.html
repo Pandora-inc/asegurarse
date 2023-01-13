@@ -1,0 +1,35 @@
+{% extends "base-parametros.html" %}
+
+{% block title %} Bancos {% endblock %}
+{% block listado %} Bancos {% endblock %}
+
+{% block body %}
+  <div class="container py-5">
+    <div class="row">
+      <table id="listado" class="table table-striped" width="100%">
+        <thead>
+          <tr>
+            <th scope="col">Banco</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for banco in lista_bancos %}
+          <tr>
+            <td>{{banco.descrip}}</td>
+            <td>
+              <button type="button" class="btn btn-primary"><i class="fa fa-eye"></i></button>
+              <button type="button" class="btn btn-success"><i class="fa fa-edit"></i></button>
+              <button type="button" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p></p>
+      <a class="btn btn-secondary btn-lg disabled" href="#" role="button">Agregar Banco</a>
+      <p></p>
+      <a class="btn btn-success btn-lg btn-block" href="/parametros/" role="button">Salir</a>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base-actividad.html" %}
+
+{% block title %} Medios de Pago {% endblock %}
+{% block listado %} Medios de Pago {% endblock %}
+
+{% block body %}
+  <div class="container py-5">
+    <div class="row">
+      <table id="listado" class="table table-striped" width="100%">
+        <thead>
+          <tr>
+            <th scope="col">Medio de Pago</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for medio_de_pago in mediosdepago %}
+          <tr>
+            <td>{{medio_de_pago.nombre}}</td>
+            <td>{{medio_de_pago.tipo}}</td>
+            <td>
+              <a href="{% url 'parametros:editarmediodepago' medio_de_pago.id %}" class="btn btn-primary">Editar</a>
+              <a href="{% url 'parametros:eliminarmediodepago' medio_de_pago.id %}" class="btn btn-danger">Eliminar</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p></p>
+      <a class="btn btn-success btn-lg" href="{% url 'parametros:agregarmediodepago' %}" role="button">Agregar Medio de Pago</a>
+      <p></p>
+      <a class="btn btn-success btn-lg btn-block" href="/parametros/" role="button">Salir</a>
+    </div>
+  </div>
+{% endblock %}
