@@ -21,7 +21,7 @@ services:
   db:
     image: postgres:13.0-alpine
     volumes:
-      - ./asegurarse_init_db.sql:/docker-entrypoint-initdb.d/init.sql
+      # - ./asegurarse_init_db.sql:/docker-entrypoint-initdb.d/init.sql
       - db_volume:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=hello_django
