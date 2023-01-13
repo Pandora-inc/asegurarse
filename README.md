@@ -4,6 +4,12 @@ Puede descargar docker desde el siguiente link: [docker-desktop](https://www.doc
 
 ## Comandos para la ejecucion
 
+Activar las variables de ambiente en python
+
+```shell
+source app/env/Scripts/activate
+```
+
 Para correr el proyecto ejecute el comando
 
 ```shell
