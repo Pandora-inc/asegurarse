@@ -21,12 +21,12 @@ services:
   db:
     image: postgres:13.0-alpine
     volumes:
-      # - ./asegurarse_init_db.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./asegurarse_init_db.sql:/docker-entrypoint-initdb.d/init.sql
       - db_volume:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=hello_django
-      - POSTGRES_PASSWORD=hello_django
-      - POSTGRES_DB=hello_django_dev
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=rabenbac_asegurarse
 
 
   adminer:
