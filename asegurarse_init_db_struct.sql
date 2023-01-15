@@ -504,29 +504,21 @@ CREATE TABLE IF NOT EXISTS pagos_cuotas (
  comprobante_id numeric(11) DEFAULT NULL 
 ) ;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 CREATE TABLE IF NOT EXISTS polizas_rendicion (
  id serial NOT NULL PRIMARY KEY,
  rendicion_id numeric(11) NOT NULL DEFAULT '0',
  poliza_id numeric(11) NOT NULL DEFAULT '0',
  cuota_id numeric(11) NOT NULL DEFAULT '0',
- PRIMARY KEY (id,rendicion_id,poliza_id,cuota_id)
+ UNIQUE (id,rendicion_id,poliza_id,cuota_id)
 ) ;
+
+CREATE TABLE IF NOT EXISTS provincias (
+ id serial NOT NULL PRIMARY KEY,
+ nombre varchar(32) NOT NULL,
+ orden numeric(11) NOT NULL,
+ status smallint NOT NULL 
+) ;
+COMMENT ON COLUMN provincias.orden IS 'orden de aparicion';
 
 CREATE TABLE IF NOT EXISTS postal (
  id serial NOT NULL PRIMARY KEY,
@@ -552,14 +544,6 @@ CREATE TABLE IF NOT EXISTS productores (
  matricula varchar(10) DEFAULT NULL,
  ultima_orden numeric(11) DEFAULT NULL 
 ) ;
-
-CREATE TABLE IF NOT EXISTS provincias (
- id serial NOT NULL PRIMARY KEY,
- nombre varchar(32) NOT NULL,
- orden numeric(11) NOT NULL,
- status smallint NOT NULL 
-) ;
-COMMENT ON COLUMN provincias.orden IS 'orden de aparicion';
 
 CREATE TABLE IF NOT EXISTS rendiciones (
  id serial NOT NULL PRIMARY KEY,
