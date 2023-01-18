@@ -37,7 +37,7 @@ class ClientesProductores(admin.ModelAdmin):
 
 admin.site.site_header = "Asegurarse"
 admin.site.site_title = "Panel de control"
-
+ 
 # Register your models here.
 admin.site.register(Clientes, ClientesAdmin)
 admin.site.register(Ordenes, ClientesOrdenes)
@@ -45,6 +45,3 @@ admin.site.register(Companias, ClientesCompanias)
 admin.site.register(Secciones, ClientesSecciones)
 admin.site.register(Productores, ClientesProductores)
 
-
-# admin.site.register(Tiposdoc)
-# admin.site.register(ClientesMediosdepago)
