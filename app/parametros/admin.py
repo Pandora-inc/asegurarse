@@ -4,7 +4,14 @@ from django.contrib import admin
 
 from .models import *
 
-admin.site.register(Banco)
+
+class BancoAdmin(admin.ModelAdmin):
+    """ Clase con las configuraciones para el Admin de Banco """
+    list_display = ['descrip']
+    search_fields = ['descrip']
+
+
+admin.site.register(Banco, BancoAdmin)
 admin.site.register(Bancosucu)
 admin.site.register(Provincias)
 admin.site.register(Postal)

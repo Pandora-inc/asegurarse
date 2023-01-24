@@ -21,20 +21,28 @@ services:
   db:
     image: postgres:13.0-alpine
     volumes:
-      # - ./asegurarse_init_db.sql:/docker-entrypoint-initdb.d/init.sql
+      # - ./asegurarse_init_db.sql:/docker-entrypoint-initdb.d/asegurarse_init_db_struct.sql
+      # - ./asegurarse_init_db.sql:/docker-entrypoint-initdb.d/asegurarse_init_db_datos.sql
       - db_volume:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=hello_django
-      - POSTGRES_PASSWORD=hello_django
-      - POSTGRES_DB=hello_django_dev
+      - POSTGRES_USER=webtofly_db_user
+      - POSTGRES_PASSWORD=bw1L[{wezRx9
+      - POSTGRES_DB=webtofly_asegurarse
 
 
   adminer:
-    image: adminer
+    image: dpage/pgadmin4
     restart: always
     ports:
-      - 8080:8080
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ivanberlot@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: i164iber
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
     hostname: adminer
 
 volumes:
   db_volume:
+  pgadmin-data:

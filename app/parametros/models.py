@@ -8,10 +8,10 @@ class Banco(models.Model):
     descrip = models.CharField(max_length=32, blank=True, null=True)
 
     def __str__(self):
-        return self.descrip
+        return str(self.descrip)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'banco'
         ordering = ('descrip',)
 
@@ -19,13 +19,13 @@ class Banco(models.Model):
 class Bancosucu(models.Model):
     descrip = models.CharField(max_length=32, blank=True, null=True)
     codigo = models.CharField(max_length=16, blank=True, null=True)
-    banco = models.ForeignKey(Banco, models.DO_NOTHING)
+    banco = models.ForeignKey(Banco, models.DO_NOTHING, blank=True, null=True)
 
     def __str__(self):
-        return self.descrip
+        return str(self.descrip)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'bancosucu'
         ordering = ('descrip',)
 
@@ -37,10 +37,10 @@ class Provincias(models.Model):
     status = models.IntegerField()
 
     def __str__(self):
-        return self.nombre
+        return str(self.nombre)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'provincias'
 
 
@@ -48,14 +48,14 @@ class Postal(models.Model):
     cp = models.CharField(max_length=4, verbose_name='CP')
     cpa = models.CharField(max_length=16, verbose_name='CPA')
     referencia = models.CharField(max_length=64,  verbose_name='Referencia')
-    provincia = models.ForeignKey('Provincias', models.DO_NOTHING, blank=True, null=True, verbose_name='Provincia')
+    provincia = models.ForeignKey(Provincias, models.DO_NOTHING, blank=True, null=True, verbose_name='Provincia')
     status = models.BooleanField(default=True, verbose_name='Activo')
 
     def __str__(self):
-        return self.cp
+        return str(self.referencia)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'postal'
         ordering = ('referencia',)
 
@@ -67,25 +67,23 @@ class Monedas(models.Model):
     status = models.BooleanField(default=True, verbose_name='Activo')
 
     def __str__(self):
-        return self.nombre
+        return str(self.nombre)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'monedas'
-        ordering = ('nombre',)
-
 
 class Tipospedido(models.Model):
     nombre = models.CharField(max_length=32, verbose_name='Tipo de Pedido')
     status = models.BooleanField(default=True, verbose_name='Activo')
 
     def __str__(self):
-        return self.nombre
+        return str(self.nombre)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'tipospedido'
-        ordering = ('nombre',)
+        ordering = ('nombre', 'status')
 
 
 class Tipospoliza(models.Model):
@@ -93,12 +91,14 @@ class Tipospoliza(models.Model):
     status = models.BooleanField(default=True, verbose_name='Activo')
 
     def __str__(self):
-        return self.nombre
+        return str(self.nombre)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'tipospoliza'
-        ordering = ('nombre',)
+        ordering = ('nombre', 'status')
+
+
 
 TIPOS_MEDIO_DE_PAGO = [
     ('Tarjeta', 'Tarjeta'),
@@ -112,9 +112,37 @@ class Mediosdepago(models.Model):
     status = models.BooleanField(default=True, verbose_name='Activo')
 
     def __str__(self):
-        return self.nombre
+        return str(self.nombre)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'mediosdepago'
         ordering = ('nombre',)
+
+class Tiposdoc(models.Model):
+    """ Clase con los tipos de documentos """
+
+    nombre = models.CharField(max_length=5, blank=True, null=True, db_index=True)
+    status = models.IntegerField(blank=True, null=True)
+    descrip = models.CharField(max_length=32, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.nombre)
+
+    class Meta:
+        db_table = 'tiposdoc'
+        verbose_name = 'Tipo de documento'
+        verbose_name_plural = 'Tipos de documentos'
+
+
+class Organizador(models.Model):
+    status = models.BooleanField()
+    nombre = models.CharField(max_length=32)
+    direccion = models.CharField(max_length=64)
+    telefonos = models.CharField(max_length=64)
+
+    def __str__(self):
+        return str(self.nombre)
+
+    class Meta:
+        db_table = 'organizadores'

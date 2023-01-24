@@ -18,7 +18,7 @@ def actividad(request):
 @login_required(login_url='login')
 def clientes(request):
     lista_clientes = Clientes.objects.all()
-    paginator = Paginator(lista_clientes, lista_clientes.count())
+    paginator = Paginator(lista_clientes, 25)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-(5#&nr35yg_6*wjb+9w@!y=tg*ex05j(tg^1k=@jfk13u91o95
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = int(os.environ.get("DEBUG", default=0))
+DEBUG = int(os.environ.get("DEBUG", default=1))
 
 # ALLOWED_HOSTS = ['*']
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
@@ -60,7 +60,7 @@ ROOT_URLCONF = 'asegurarse.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,45 +81,13 @@ WSGI_APPLICATION = 'asegurarse.wsgi.application'
 DATABASES = {
     'default': {
         "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
-        "USER": os.environ.get("SQL_USER", "user"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
-        "HOST": os.environ.get("SQL_HOST", "localhost"),
+        "NAME": 'webtofly_asegurarse',
+        "USER": os.environ.get("SQL_USER", "webtofly_db_user"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD", "bw1L[{wezRx9"),
+        "HOST": os.environ.get("SQL_HOST", "db"),
         "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'rabenbac_asegurarse',
-#         'USER': 'rabenbac_root',
-#         'HOST': 'rb.ravensdigitech.com',
-#         # 'HOST': '127.0.0.1',
-#         'PORT': 3306,
-#         'PASSWORD': 'David2022Lito',
-#         'OPTIONS': {
-#             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'"
-#         }
-#     }
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'w7xm7ojku0pgh29t',
-#         'USER': 'o2f4cj46wucjebko',
-#         'HOST': 'jbb8y3dri1ywovy2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-#         'PORT': 3306,
-#         'PASSWORD': 'vpdfqu7efu0cl5kw',
-#         'OPTIONS': {
-#             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'"
-#         }
-#     }
-# }
-
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -152,7 +120,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'staticfiles/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
+
+ADMIN_MEDIA_PREFIX = 'staticfiles/admin/'
+
 # STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 # django_heroku.settings(locals())
 
