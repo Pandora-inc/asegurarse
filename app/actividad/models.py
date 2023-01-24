@@ -19,7 +19,7 @@ class Productores(models.Model):
         return str(self.nombre)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'productores'
         ordering = ('nombre',)
 
@@ -52,8 +52,8 @@ class Clientes(models.Model):
     banco_ctacte = models.CharField(max_length=16, blank=True, null=True)
     debaut = models.BooleanField(blank=True, null=True)
     observaciones = models.TextField(blank=True, null=True)
-    ordenes = models.ManyToManyField('Ordenes', blank=True, null=True)
-    polizas = models.ManyToManyField('Polizas', blank=True, null=True)
+    # ordenes = models.ManyToManyField('Ordenes', blank=True, null=True)
+    # polizas = models.ManyToManyField('Polizas', blank=True, null=True)
 
     def __str__(self):
         return str(self.nombre)
@@ -73,7 +73,7 @@ class ClientesMediosdepago(models.Model):
         return str(self.numero)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'clientes_mediosdepago'
 
 
@@ -101,7 +101,7 @@ class Companias(models.Model):
         return str(self.nombre)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'companias'
         ordering = ('nombre',)
 
@@ -116,12 +116,12 @@ class Secciones(models.Model):
         return str(self.nombre)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'secciones'
         ordering = ('nombre',)
 
 class Coberturas(models.Model):
-    nombre = models.CharField(max_length=64, db_collation='latin1_swedish_ci')
+    nombre = models.CharField(max_length=64)
     seccion = models.ForeignKey('Secciones', models.DO_NOTHING, blank=True, null=True)
     status = models.BooleanField(default=True, verbose_name='Activo')
 
@@ -129,7 +129,7 @@ class Coberturas(models.Model):
         return str(self.nombre)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'coberturas'
 
 
@@ -175,36 +175,26 @@ class Ordenes(models.Model):
         return str(self.numero) # + " - " + str(self.productor)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'ordenes'
         verbose_name = 'orden'
         verbose_name_plural = 'ordenes'
         unique_together = (('numero', 'flag'),)
 
 
-class ClientesOrdenes(models.Model):
-    status = models.BooleanField()
-    cliente = models.ForeignKey(Clientes, models.DO_NOTHING)
-    orden = models.ForeignKey(Ordenes, models.DO_NOTHING)
-
-    def __str__(self):
-        return str(self.orden + " - " + self.cliente)
-
-    class Meta:
-        db_table = 'clientes_ordenes'
 
 
 
 class Polizas(models.Model):
     status = models.BooleanField()
     numero = models.CharField(max_length=64)
-    orden_id = models.IntegerField(max_length=11)
+    orden_id = models.IntegerField()
     fecha = models.DateField(blank=True, null=True)
     fecha_recepcion = models.DateField(blank=True, null=True)
     vigencia_desde = models.DateField(blank=True, null=True)
     vigencia_hasta = models.DateField(blank=True, null=True)
     num_poliza = models.CharField(max_length=64, null=True)
-    cliente = models.ForeignKey(Clientes, models.DO_NOTHING)
+    cliente = models.ForeignKey(Clientes, models.RESTRICT)
     productor = models.ForeignKey(Productores, models.RESTRICT)
     organizador = models.ForeignKey(Organizador, models.RESTRICT, blank=True, null=True)
     moneda = models.ForeignKey(Monedas, models.RESTRICT)
@@ -232,7 +222,7 @@ class Polizas(models.Model):
     telefonos = models.CharField(max_length=64, blank=True, null=True)
     email = models.CharField(max_length=64, blank=True, null=True)
     provincia = models.ForeignKey(Provincias, models.RESTRICT)
-    cant_cuotas = models.IntegerField(max_length=10)
+    cant_cuotas = models.IntegerField()
     siniestro01 = models.CharField(max_length=100, blank=True, null=True)
     siniestro02 = models.CharField(max_length=100, blank=True, null=True)
     siniestro03 = models.CharField(max_length=100, blank=True, null=True)
@@ -246,13 +236,25 @@ class Polizas(models.Model):
     class Meta:
         db_table = 'polizas'
 
-class ClientesPolizas(models.Model):
-    status = models.BooleanField(default=True)
-    clientes = models.ForeignKey(Clientes, models.DO_NOTHING)
-    polizas = models.ForeignKey(Polizas, models.DO_NOTHING)
+# class ClientesPolizas(models.Model):
+#     status = models.BooleanField(default=True)
+#     clientes = models.ForeignKey(Clientes, models.DO_NOTHING)
+#     polizas = models.ForeignKey(Polizas, models.DO_NOTHING)
 
-    def __str__(self):
-        return str(self.clientes + " - " + self.polizas)
+#     def __str__(self):
+#         return str(self.clientes + " - " + self.polizas)
 
-    class Meta:
-        db_table = 'clientes_polizas'
+#     class Meta:
+#         db_table = 'clientes_polizas'
+
+
+# class ClientesOrdenes(models.Model):
+#     status = models.BooleanField()
+#     cliente = models.ForeignKey(Clientes, models.DO_NOTHING)
+#     orden = models.ForeignKey(Ordenes, models.DO_NOTHING)
+
+#     def __str__(self):
+#         return str(self.orden + " - " + self.cliente)
+
+#     class Meta:
+#         db_table = 'clientes_ordenes'

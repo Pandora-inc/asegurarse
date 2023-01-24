@@ -81,45 +81,13 @@ WSGI_APPLICATION = 'asegurarse.wsgi.application'
 DATABASES = {
     'default': {
         "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": 'asegurarse_db',
-        "USER": os.environ.get("SQL_USER", "hello_django"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD", "hello_django"),
+        "NAME": 'webtofly_asegurarse',
+        "USER": os.environ.get("SQL_USER", "webtofly_db_user"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD", "bw1L[{wezRx9"),
         "HOST": os.environ.get("SQL_HOST", "db"),
         "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'rabenbac_asegurarse',
-#         'USER': 'rabenbac_root',
-#         'HOST': 'rb.ravensdigitech.com',
-#         # 'HOST': '127.0.0.1',
-#         'PORT': 3306,
-#         'PASSWORD': 'David2022Lito',
-#         'OPTIONS': {
-#             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'"
-#         }
-#     }
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'w7xm7ojku0pgh29t',
-#         'USER': 'o2f4cj46wucjebko',
-#         'HOST': 'jbb8y3dri1ywovy2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-#         'PORT': 3306,
-#         'PASSWORD': 'vpdfqu7efu0cl5kw',
-#         'OPTIONS': {
-#             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'"
-#         }
-#     }
-# }
-
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {

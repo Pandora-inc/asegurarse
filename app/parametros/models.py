@@ -11,7 +11,7 @@ class Banco(models.Model):
         return str(self.descrip)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'banco'
         ordering = ('descrip',)
 
@@ -19,13 +19,13 @@ class Banco(models.Model):
 class Bancosucu(models.Model):
     descrip = models.CharField(max_length=32, blank=True, null=True)
     codigo = models.CharField(max_length=16, blank=True, null=True)
-    banco = models.ForeignKey(Banco, models.DO_NOTHING)
+    banco = models.ForeignKey(Banco, models.DO_NOTHING, blank=True, null=True)
 
     def __str__(self):
         return str(self.descrip)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'bancosucu'
         ordering = ('descrip',)
 
@@ -37,10 +37,10 @@ class Provincias(models.Model):
     status = models.IntegerField()
 
     def __str__(self):
-        return self.nombre
+        return str(self.nombre)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'provincias'
 
 
@@ -55,7 +55,7 @@ class Postal(models.Model):
         return str(self.referencia)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'postal'
         ordering = ('referencia',)
 
@@ -70,7 +70,7 @@ class Monedas(models.Model):
         return str(self.nombre)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'monedas'
 
 class Tipospedido(models.Model):
@@ -81,9 +81,9 @@ class Tipospedido(models.Model):
         return str(self.nombre)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'tipospedido'
-        ordering = ('nombre')
+        ordering = ('nombre', 'status')
 
 
 class Tipospoliza(models.Model):
@@ -94,9 +94,9 @@ class Tipospoliza(models.Model):
         return str(self.nombre)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'tipospoliza'
-        ordering = ('nombre')
+        ordering = ('nombre', 'status')
 
 
 
@@ -115,7 +115,7 @@ class Mediosdepago(models.Model):
         return str(self.nombre)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'mediosdepago'
         ordering = ('nombre',)
 
