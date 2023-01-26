@@ -1,7 +1,16 @@
 """ Configuraciones del Admin """
 from django.contrib import admin
 
-from .models import Clientes, Ordenes, Companias, Secciones, Productores, Polizas
+from .models import Clientes, Ordenes, Companias, Secciones, Productores, Polizas, ClientesMediosdepago
+
+class ClientesMediosdepagoInline(admin.TabularInline):
+    model = ClientesMediosdepago
+
+class OrdenesInline(admin.TabularInline):
+    model = Ordenes
+
+class PolizasInline(admin.TabularInline):
+    model = Polizas
 
 class ClientesAdmin(admin.ModelAdmin):
     """ Clase con las configuraciones para el Admin de clientes """
@@ -11,6 +20,7 @@ class ClientesAdmin(admin.ModelAdmin):
     search_fields = ['id', 'direccion', 'nombre']
     # añade una lista desplegable con la que podrás filtrar (activo es un atributo booleano)
     list_filter = ['status']
+    inlines = [ClientesMediosdepagoInline, OrdenesInline, PolizasInline]
 
 class CompaniasAdmin(admin.ModelAdmin):
     """ Clase con las configuraciones para el Admin de Companias """
@@ -38,7 +48,41 @@ class PolizasAdmin(admin.ModelAdmin):
     """ Clase con las configuraciones para el Admin de Productores """
     list_display = ['numero', 'vigencia_desde', 'vigencia_hasta']
     search_fields = ['numero', 'vigencia_desde', 'vigencia_hasta']
-    # search_fields = ['numero', 'vigencia_desde', 'vigencia_hasta', 'clientes__nombre', 'productor__nombre']
+    fieldsets = (
+        ('Orden', {
+            'fields': ('numero', 'cliente', 'productor', 'organizador')
+        }),
+        ('Vigencia', {
+            'fields': ('vigencia_desde', 'vigencia_hasta')
+        }),
+        ('Riesgo', {
+            'fields': ('direccion', 'postal', 'provincia')
+        }),
+        ('Poliza', {
+            'fields': ('num_poliza', 'fecha', 'tipopoliza', 'seccion', 'cobertura', 'compania', 'moneda')
+        }),
+        ('Siniestros', {
+            'fields': ('siniestro01', 'siniestro02', 'siniestro03', 'siniestro04')
+        }),
+        ('valores', {
+            'fields': ('suma', 'prima', 'recargos', 'bonificacion', 'premio')
+        }),
+        ('Comisiones', {
+            'fields': ('produccion', 'cobranza', 'recup_gastos')
+        }),
+        ('???', {
+            'fields': ('fecha_recepcion', 'iva', 'ing_brutos')
+        }),
+        ('Formas de pago', {
+            'fields': ('mediodepago', 'nro_mediopago', 'cant_cuotas')
+        }),
+        (None, {
+            'fields': ('bien_asegurado', 'riesgo_desc', 'status')
+        }),
+        ('.', {
+            'fields': ('riesgo_valor', 'email', 'nota_credito', 'telefonos', 'restante')
+        }),
+    )
 
 admin.site.site_header = "Asegurarse"
 admin.site.site_title = "Panel de control"

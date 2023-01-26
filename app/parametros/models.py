@@ -34,7 +34,7 @@ class Bancosucu(models.Model):
 class Provincias(models.Model):
     nombre = models.CharField(max_length=32)
     orden = models.IntegerField()
-    status = models.IntegerField()
+    status = models.BooleanField(default=True, verbose_name='Activo')
 
     def __str__(self):
         return str(self.nombre)
@@ -123,7 +123,7 @@ class Tiposdoc(models.Model):
     """ Clase con los tipos de documentos """
 
     nombre = models.CharField(max_length=5, blank=True, null=True, db_index=True)
-    status = models.IntegerField(blank=True, null=True)
+    status = models.BooleanField(default=True, verbose_name='Activo')
     descrip = models.CharField(max_length=32, blank=True, null=True)
 
     def __str__(self):
@@ -136,7 +136,7 @@ class Tiposdoc(models.Model):
 
 
 class Organizador(models.Model):
-    status = models.BooleanField()
+    status = models.BooleanField(default=True, verbose_name='Activo')
     nombre = models.CharField(max_length=32)
     direccion = models.CharField(max_length=64)
     telefonos = models.CharField(max_length=64)

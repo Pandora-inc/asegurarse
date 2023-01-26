@@ -5,7 +5,7 @@ from parametros.models import Mediosdepago, Tiposdoc, Postal, Monedas, Tipospoli
 
 class Productores(models.Model):
     nombre = models.CharField(max_length=32)
-    status = models.IntegerField()
+    status = models.BooleanField(default=True, verbose_name='Activo')
     direccion = models.CharField(max_length=64, blank=True, null=True)
     telefonos = models.CharField(max_length=64, blank=True, null=True)
     postal = models.ForeignKey('parametros.Postal', models.DO_NOTHING, blank=True, null=True)
@@ -64,7 +64,7 @@ class Clientes(models.Model):
 
 
 class ClientesMediosdepago(models.Model):
-    status = models.IntegerField()
+    status = models.BooleanField(default=True, verbose_name='Activo')
     cliente = models.ForeignKey(Clientes, models.DO_NOTHING, blank=True, null=True)
     mediodepago = models.ForeignKey(Mediosdepago, models.DO_NOTHING, blank=True, null=True)
     numero = models.CharField(max_length=64, blank=True, null=True)
@@ -109,7 +109,7 @@ class Companias(models.Model):
 class Secciones(models.Model):
     nombre = models.CharField(max_length=32)
     descrip = models.CharField(max_length=64, blank=True, null=True)
-    status = models.IntegerField()
+    status = models.BooleanField(default=True, verbose_name='Activo')
     abrev = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
@@ -186,48 +186,59 @@ class Ordenes(models.Model):
 
 
 class Polizas(models.Model):
-    status = models.BooleanField()
+    # Orden
+    # orden_id = models.IntegerField()
     numero = models.CharField(max_length=64)
-    orden_id = models.IntegerField()
-    fecha = models.DateField(blank=True, null=True)
-    fecha_recepcion = models.DateField(blank=True, null=True)
-    vigencia_desde = models.DateField(blank=True, null=True)
-    vigencia_hasta = models.DateField(blank=True, null=True)
-    num_poliza = models.CharField(max_length=64, null=True)
     cliente = models.ForeignKey(Clientes, models.RESTRICT)
     productor = models.ForeignKey(Productores, models.RESTRICT)
     organizador = models.ForeignKey(Organizador, models.RESTRICT, blank=True, null=True)
-    moneda = models.ForeignKey(Monedas, models.RESTRICT)
-    compania = models.ForeignKey(Companias, models.RESTRICT)
+    #Vigencia
+    vigencia_desde = models.DateField(blank=True, null=True)
+    vigencia_hasta = models.DateField(blank=True, null=True)
+    # Riesgo
+    direccion = models.CharField(max_length=64, null=True)
+    postal = models.ForeignKey(Postal, models.RESTRICT)
+    provincia = models.ForeignKey(Provincias, models.RESTRICT)
+    # Poliza
+    num_poliza = models.CharField(max_length=64, null=True)
+    fecha = models.DateField(blank=True, null=True)
+    tipopoliza = models.ForeignKey(Tipospoliza, models.RESTRICT)
     seccion = models.ForeignKey(Secciones, models.RESTRICT)
     cobertura = models.ForeignKey(Coberturas, models.RESTRICT)
+    compania = models.ForeignKey(Companias, models.RESTRICT)
+    moneda = models.ForeignKey(Monedas, models.RESTRICT)
+    # Siniestros
+    siniestro01 = models.CharField(max_length=100, blank=True, null=True)
+    siniestro02 = models.CharField(max_length=100, blank=True, null=True)
+    siniestro03 = models.CharField(max_length=100, blank=True, null=True)
+    siniestro04 = models.CharField(max_length=100, blank=True, null=True)
+    # valores
     suma = models.DecimalField(max_digits=11, decimal_places=2)
     prima = models.DecimalField(max_digits=11, decimal_places=2)
     recargos = models.DecimalField(max_digits=11, decimal_places=2)
     bonificacion = models.DecimalField(max_digits=11, decimal_places=2)
     premio = models.DecimalField(max_digits=11, decimal_places=2)
-    iva = models.DecimalField(max_digits=11, decimal_places=2)
-    ing_brutos = models.DecimalField(max_digits=11, decimal_places=2)
-    # tipopoliza = models.ForeignKey(Tipospoliza, models.RESTRICT)
-    riesgo_desc = models.TextField()
-    riesgo_valor = models.DecimalField(max_digits=11, decimal_places=2,blank=True, null=True)
-    bien_asegurado = models.CharField(max_length=80, null=True)
+    # Comisiones
     produccion = models.DecimalField(max_digits=11, decimal_places=2)
     cobranza = models.DecimalField(max_digits=11, decimal_places=2)
     recup_gastos = models.DecimalField(max_digits=11, decimal_places=2)
+    # ???
+    fecha_recepcion = models.DateField(blank=True, null=True)
+    iva = models.DecimalField(max_digits=11, decimal_places=2)
+    ing_brutos = models.DecimalField(max_digits=11, decimal_places=2)
+    # Formas de pago
     mediodepago = models.ForeignKey(Mediosdepago, models.RESTRICT)
     nro_mediopago = models.CharField(max_length=64, null=True)
-    direccion = models.CharField(max_length=64, null=True)
-    postal = models.ForeignKey(Postal, models.RESTRICT)
-    telefonos = models.CharField(max_length=64, blank=True, null=True)
-    email = models.CharField(max_length=64, blank=True, null=True)
-    provincia = models.ForeignKey(Provincias, models.RESTRICT)
     cant_cuotas = models.IntegerField()
-    siniestro01 = models.CharField(max_length=100, blank=True, null=True)
-    siniestro02 = models.CharField(max_length=100, blank=True, null=True)
-    siniestro03 = models.CharField(max_length=100, blank=True, null=True)
-    siniestro04 = models.CharField(max_length=100, blank=True, null=True)
+
+    bien_asegurado = models.CharField(max_length=80, null=True)
+    riesgo_desc = models.TextField()
+    status = models.BooleanField(default=True, verbose_name='Activo')
+
+    riesgo_valor = models.DecimalField(max_digits=11, decimal_places=2,blank=True, null=True)
+    email = models.CharField(max_length=64, blank=True, null=True)
     nota_credito = models.BooleanField()
+    telefonos = models.CharField(max_length=64, blank=True, null=True)
     restante = models.DecimalField(max_digits=11, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
