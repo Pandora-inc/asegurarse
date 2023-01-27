@@ -202,7 +202,7 @@ class Polizas(models.Model):
     # Poliza
     num_poliza = models.CharField(max_length=64, null=True)
     fecha = models.DateField(blank=True, null=True)
-    tipopoliza = models.ForeignKey(Tipospoliza, models.RESTRICT)
+    tipopoliza = models.ForeignKey(Tipospoliza, models.RESTRICT, blank=True, null=True)
     seccion = models.ForeignKey(Secciones, models.RESTRICT)
     cobertura = models.ForeignKey(Coberturas, models.RESTRICT)
     compania = models.ForeignKey(Companias, models.RESTRICT)

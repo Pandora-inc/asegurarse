@@ -85,7 +85,10 @@ DATABASES = {
         "USER": os.environ.get("SQL_USER", "webtofly_db_user"),
         "PASSWORD": os.environ.get("SQL_PASSWORD", "bw1L[{wezRx9"),
         "HOST": os.environ.get("SQL_HOST", "db"),
-        "PORT": os.environ.get("SQL_PORT", "5432"),
+        "PORT": os.environ.get("SQL_PORT", "3306"),
+        'OPTIONS': {
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
     }
 }
 
