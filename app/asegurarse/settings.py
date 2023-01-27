@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'asegurarse.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 DATABASES = {
     'default': {
-        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.mysql"),
         "NAME": 'webtofly_asegurarse',
         "USER": os.environ.get("SQL_USER", "webtofly_db_user"),
         "PASSWORD": os.environ.get("SQL_PASSWORD", "bw1L[{wezRx9"),
