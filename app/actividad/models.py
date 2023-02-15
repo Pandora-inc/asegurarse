@@ -60,7 +60,7 @@ class Productores(models.Model):
 
 class Clientes(models.Model):
     # status = models.BooleanField(default=True)
-    status = models.BooleanField(default=True, blank=True, null=True)
+    activo = models.BooleanField(default=True, blank=True, null=True)
     nombre = models.CharField(max_length=64)
     descrip = models.CharField(max_length=256, blank=True, null=True)
     direccion = models.CharField(max_length=64, blank=True, null=True)
