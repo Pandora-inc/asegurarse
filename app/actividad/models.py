@@ -3,79 +3,6 @@ from django.db import models
 from parametros.models import Mediosdepago, Tiposdoc, Postal, Monedas, Tipospoliza, Tipospedido, Provincias, Organizador
 
 
-class Productores(models.Model):
-    nombre = models.CharField(max_length=32)
-    status = models.BooleanField(default=True, verbose_name='Activo')
-    direccion = models.CharField(max_length=64, blank=True, null=True)
-    telefonos = models.CharField(max_length=64, blank=True, null=True)
-    postal = models.ForeignKey('parametros.Postal', models.DO_NOTHING, blank=True, null=True)
-    email = models.CharField(max_length=32, blank=True, null=True)
-    org1_id = models.IntegerField(blank=True, null=True)
-    org2_id = models.IntegerField(blank=True, null=True)
-    matricula = models.CharField(max_length=10, blank=True, null=True)
-    ultima_orden = models.IntegerField(blank=True, null=True)
-
-    def __str__(self):
-        return str(self.nombre)
-
-    class Meta:
-        # managed = False
-        db_table = 'productores'
-        ordering = ('nombre',)
-
-class Clientes(models.Model):
-    # status = models.BooleanField(default=True)
-    status = models.BooleanField(default=True, blank=True, null=True)
-    nombre = models.CharField(max_length=64)
-    descrip = models.CharField(max_length=256, blank=True, null=True)
-    direccion = models.CharField(max_length=32, blank=True, null=True)
-    postal = models.ForeignKey(Postal, models.DO_NOTHING, blank=True, null=True)
-    telefonos = models.CharField(max_length=32, blank=True, null=True)
-    email = models.CharField(max_length=32, blank=True, null=True)
-    establecim = models.CharField(max_length=64, blank=True, null=True)
-    actividad = models.CharField(max_length=32, blank=True, null=True)
-    nacimiento = models.DateField(blank=True, null=True)
-    tipodoc = models.ForeignKey(Tiposdoc, models.DO_NOTHING, blank=True, null=True)
-    documento = models.CharField(max_length=11, blank=True, null=True)
-    cuit = models.CharField(max_length=13, blank=True, null=True)
-    fecha = models.DateField(blank=True, null=True)
-    seg_retiro = models.BooleanField(blank=True, null=True)
-    corresp = models.BooleanField(blank=True, null=True)
-    reg_num = models.CharField(max_length=16, blank=True, null=True)
-    reg_categ = models.CharField(max_length=16, blank=True, null=True)
-    reg_juris = models.CharField(max_length=16, blank=True, null=True)
-    reg_venc = models.DateField(blank=True, null=True)
-    productor = models.ForeignKey(Productores, models.DO_NOTHING, blank=True, null=True)
-    banco = models.CharField(max_length=32, blank=True, null=True)
-    banco_suc = models.CharField(max_length=8, blank=True, null=True)
-    banco_caja = models.CharField(max_length=16, blank=True, null=True)
-    banco_ctacte = models.CharField(max_length=16, blank=True, null=True)
-    debaut = models.BooleanField(blank=True, null=True)
-    observaciones = models.TextField(blank=True, null=True)
-    # ordenes = models.ManyToManyField('Ordenes', blank=True, null=True)
-    # polizas = models.ManyToManyField('Polizas', blank=True, null=True)
-
-    def __str__(self):
-        return str(self.nombre)
-
-    class Meta:
-        db_table = 'clientes'
-        ordering = ('nombre',)
-
-
-class ClientesMediosdepago(models.Model):
-    status = models.BooleanField(default=True, verbose_name='Activo')
-    cliente = models.ForeignKey(Clientes, models.DO_NOTHING, blank=True, null=True)
-    mediodepago = models.ForeignKey(Mediosdepago, models.DO_NOTHING, blank=True, null=True)
-    numero = models.CharField(max_length=64, blank=True, null=True)
-
-    def __str__(self):
-        return str(self.numero)
-
-    class Meta:
-        # managed = False
-        db_table = 'clientes_mediosdepago'
-
 
 class Companias(models.Model):
     nombre = models.CharField(max_length=32)
@@ -103,14 +30,97 @@ class Companias(models.Model):
     class Meta:
         # managed = False
         db_table = 'companias'
+        verbose_name = 'compania'
+        verbose_name_plural = 'companias'
         ordering = ('nombre',)
+
+
+class Productores(models.Model):
+    nombre = models.CharField(max_length=32)
+    matricula = models.CharField(max_length=10, blank=True, null=True)
+    direccion = models.CharField(max_length=64, blank=True, null=True)
+    postal = models.ForeignKey('parametros.Postal', models.DO_NOTHING, blank=True, null=True)
+    telefonos = models.CharField(max_length=64, blank=True, null=True)
+    email = models.CharField(max_length=32, blank=True, null=True)
+    org1_id = models.IntegerField(blank=True, null=True)
+    org2_id = models.IntegerField(blank=True, null=True)
+    ultima_orden = models.IntegerField(blank=True, null=True)
+    status = models.BooleanField(default=True, verbose_name='Activo')
+    # companias = models.ManyToManyField(Companias)
+
+    def __str__(self):
+        return str(self.nombre)
+
+    class Meta:
+        # managed = False
+        db_table = 'productores'
+        verbose_name = 'productor'
+        verbose_name_plural = 'productores'
+        ordering = ('nombre',)
+
+class Clientes(models.Model):
+    # status = models.BooleanField(default=True)
+    activo = models.BooleanField(default=True, blank=True, null=True)
+    nombre = models.CharField(max_length=64)
+    descrip = models.CharField(max_length=256, blank=True, null=True)
+    direccion = models.CharField(max_length=64, blank=True, null=True)
+    postal = models.ForeignKey(Postal, models.DO_NOTHING, blank=True, null=True)
+    telefonos = models.CharField(max_length=32, blank=True, null=True)
+    email = models.CharField(max_length=64, blank=True, null=True)
+    establecim = models.CharField(max_length=64, blank=True, null=True)
+    actividad = models.CharField(max_length=32, blank=True, null=True)
+    nacimiento = models.DateField(blank=True, null=True)
+    tipodoc = models.ForeignKey(Tiposdoc, models.DO_NOTHING, blank=True, null=True)
+    documento = models.CharField(max_length=11, blank=True, null=True)
+    cuit = models.CharField(max_length=13, blank=True, null=True)
+    fecha = models.DateField(blank=True, null=True)
+    seg_retiro = models.BooleanField(blank=True, null=True)
+    corresp = models.BooleanField(blank=True, null=True)
+    reg_num = models.CharField(max_length=16, blank=True, null=True)
+    reg_categ = models.CharField(max_length=16, blank=True, null=True)
+    reg_juris = models.CharField(max_length=16, blank=True, null=True)
+    reg_venc = models.DateField(blank=True, null=True)
+    productor = models.ForeignKey(Productores, models.DO_NOTHING, blank=True, null=True)
+    banco = models.CharField(max_length=32, blank=True, null=True)
+    banco_suc = models.CharField(max_length=8, blank=True, null=True)
+    banco_caja = models.CharField(max_length=16, blank=True, null=True)
+    banco_ctacte = models.CharField(max_length=16, blank=True, null=True)
+    debaut = models.BooleanField(blank=True, null=True)
+    observaciones = models.TextField(blank=True, null=True)
+    zona_cza = models.CharField(max_length=32, blank=True, null=True)
+    fuente = models.CharField(max_length=32, blank=True, null=True)
+    # ordenes = models.ManyToManyField('Ordenes', blank=True, null=True)
+    # polizas = models.ManyToManyField('Polizas', blank=True, null=True)
+
+    def __str__(self):
+        return str(self.nombre)
+
+    class Meta:
+        db_table = 'clientes'
+        verbose_name = 'cliente'
+        verbose_name_plural = 'clientes'
+        ordering = ('nombre',)
+
+
+class ClientesMediosdepago(models.Model):
+    status = models.BooleanField(default=True, verbose_name='Activo')
+    cliente = models.ForeignKey(Clientes, models.DO_NOTHING, blank=True, null=True)
+    mediodepago = models.ForeignKey(Mediosdepago, models.DO_NOTHING, blank=True, null=True)
+    numero = models.CharField(max_length=64, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.numero)
+
+    class Meta:
+        # managed = False
+        db_table = 'clientes_mediosdepago'
 
 
 class Secciones(models.Model):
     nombre = models.CharField(max_length=32)
     descrip = models.CharField(max_length=64, blank=True, null=True)
-    status = models.BooleanField(default=True, verbose_name='Activo')
     abrev = models.CharField(max_length=10, blank=True, null=True)
+    status = models.BooleanField(default=True, verbose_name='Activo')
 
     def __str__(self):
         return str(self.nombre)
@@ -118,6 +128,8 @@ class Secciones(models.Model):
     class Meta:
         # managed = False
         db_table = 'secciones'
+        verbose_name = 'seccion'
+        verbose_name_plural = 'secciones'
         ordering = ('nombre',)
 
 class Coberturas(models.Model):
@@ -130,6 +142,8 @@ class Coberturas(models.Model):
 
     class Meta:
         # managed = False
+        verbose_name = 'cobertura'
+        verbose_name_plural = 'coberturas'
         db_table = 'coberturas'
 
 
@@ -151,7 +165,7 @@ class Ordenes(models.Model):
     recargos = models.DecimalField(max_digits=11, decimal_places=2, blank=True, null=True)
     bonificacion = models.DecimalField(max_digits=11, decimal_places=2, blank=True, null=True)
     premio = models.DecimalField(max_digits=11, decimal_places=2, blank=True, null=True)
-    # tipopoliza = models.ForeignKey(Tipospoliza, models.DO_NOTHING, blank=True, null=True)
+    tipopoliza = models.ForeignKey(Tipospoliza, models.DO_NOTHING, blank=True, null=True)
     riesgo_desc = models.TextField(blank=True, null=True)
     riesgo_valor = models.DecimalField(max_digits=11, decimal_places=2, blank=True, null=True)
     bien_asegurado = models.CharField(max_length=80, blank=True, null=True)
@@ -163,6 +177,7 @@ class Ordenes(models.Model):
     responsable = models.CharField(max_length=30, blank=True, null=True)
     direccion = models.CharField(max_length=32, blank=True, null=True)
     postal = models.ForeignKey(Postal , models.DO_NOTHING, blank=True, null=True)
+    localidad = models.CharField(max_length=32, blank=True, null=True)
     poliza = models.ForeignKey('Polizas', models.DO_NOTHING, blank=True, null=True)
     num_poliza_ref = models.CharField(max_length=32, blank=True, null=True)
     cod_productor = models.CharField(max_length=16, blank=True, null=True)
@@ -202,7 +217,7 @@ class Polizas(models.Model):
     # Poliza
     num_poliza = models.CharField(max_length=64, null=True)
     fecha = models.DateField(blank=True, null=True)
-    tipopoliza = models.ForeignKey(Tipospoliza, models.RESTRICT)
+    tipopoliza = models.ForeignKey(Tipospoliza, models.RESTRICT, blank=True, null=True)
     seccion = models.ForeignKey(Secciones, models.RESTRICT)
     cobertura = models.ForeignKey(Coberturas, models.RESTRICT)
     compania = models.ForeignKey(Companias, models.RESTRICT)
@@ -246,6 +261,8 @@ class Polizas(models.Model):
 
     class Meta:
         db_table = 'polizas'
+        verbose_name = 'poliza'
+        verbose_name_plural = 'polizas'
 
 # class ClientesPolizas(models.Model):
 #     status = models.BooleanField(default=True)

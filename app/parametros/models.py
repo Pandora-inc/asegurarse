@@ -13,6 +13,8 @@ class Banco(models.Model):
     class Meta:
         # managed = False
         db_table = 'banco'
+        verbose_name = 'banco'
+        verbose_name_plural = 'bancos'
         ordering = ('descrip',)
 
 
@@ -27,6 +29,8 @@ class Bancosucu(models.Model):
     class Meta:
         # managed = False
         db_table = 'bancosucu'
+        verbose_name = 'sucursal'
+        verbose_name_plural = 'sucursales'
         ordering = ('descrip',)
 
 
@@ -41,6 +45,8 @@ class Provincias(models.Model):
 
     class Meta:
         # managed = False
+        verbose_name = 'provincia'
+        verbose_name_plural = 'provincias'
         db_table = 'provincias'
 
 
@@ -57,6 +63,8 @@ class Postal(models.Model):
     class Meta:
         # managed = False
         db_table = 'postal'
+        verbose_name = 'codigo postal'
+        verbose_name_plural = 'codigos postales'
         ordering = ('referencia',)
 
 
@@ -71,6 +79,8 @@ class Monedas(models.Model):
 
     class Meta:
         # managed = False
+        verbose_name = 'moneda'
+        verbose_name_plural = 'monedas'
         db_table = 'monedas'
 
 class Tipospedido(models.Model):
@@ -83,6 +93,8 @@ class Tipospedido(models.Model):
     class Meta:
         # managed = False
         db_table = 'tipospedido'
+        verbose_name = 'tipo de pedido'
+        verbose_name_plural = 'tipos de pedido'
         ordering = ('nombre', 'status')
 
 
@@ -96,6 +108,8 @@ class Tipospoliza(models.Model):
     class Meta:
         # managed = False
         db_table = 'tipospoliza'
+        verbose_name = 'tipo de poliza'
+        verbose_name_plural = 'tipos de poliza'
         ordering = ('nombre', 'status')
 
 
@@ -117,6 +131,8 @@ class Mediosdepago(models.Model):
     class Meta:
         # managed = False
         db_table = 'mediosdepago'
+        verbose_name = 'medio de pago'
+        verbose_name_plural = 'medios de pago'
         ordering = ('nombre',)
 
 class Tiposdoc(models.Model):
@@ -146,3 +162,5 @@ class Organizador(models.Model):
 
     class Meta:
         db_table = 'organizadores'
+        verbose_name = 'organizador'
+        verbose_name_plural = 'organizadores'

@@ -24,7 +24,6 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 SECRET_KEY = 'django-insecure-(5#&nr35yg_6*wjb+9w@!y=tg*ex05j(tg^1k=@jfk13u91o95'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
 DEBUG = int(os.environ.get("DEBUG", default=1))
 
 # ALLOWED_HOSTS = ['*']
@@ -80,12 +79,15 @@ WSGI_APPLICATION = 'asegurarse.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 DATABASES = {
     'default': {
-        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": 'webtofly_asegurarse',
-        "USER": os.environ.get("SQL_USER", "webtofly_db_user"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD", "bw1L[{wezRx9"),
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.mysql"),
+        "NAME": os.environ.get("SQL_NAME", "webtofly_asegurarse"),
+        "USER": os.environ.get("SQL_USER", "db_user"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD", "db_password"),
         "HOST": os.environ.get("SQL_HOST", "db"),
-        "PORT": os.environ.get("SQL_PORT", "5432"),
+        "PORT": os.environ.get("SQL_PORT", "3306"),
+        'OPTIONS': {
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
     }
 }
 
@@ -120,17 +122,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'staticfiles/'
+STATIC_URL = 'static_files/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_files/')
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
+ADMIN_MEDIA_PREFIX = 'static_files/admin/'
 
-ADMIN_MEDIA_PREFIX = 'staticfiles/admin/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "static_media")
 
-# STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
-# django_heroku.settings(locals())
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
