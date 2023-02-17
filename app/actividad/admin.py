@@ -1,5 +1,7 @@
 """ Configuraciones del Admin """
+import logging
 from django.contrib import admin
+from django.utils.html import format_html
 
 from .models import Clientes, Ordenes, Companias, Secciones, Productores, Polizas, ClientesMediosdepago
 
@@ -8,9 +10,11 @@ class ClientesMediosdepagoInline(admin.TabularInline):
     model = ClientesMediosdepago
     extra = 0
 
+
 class OrdenesInline(admin.TabularInline):
     model = Ordenes
     extra = 0
+
 
 class PolizasInline(admin.TabularInline):
     model = Polizas
@@ -28,10 +32,10 @@ class ClientesAdmin(admin.ModelAdmin):
     # añade un campo de texto para realizar la búsqueda, puedes añadir mas de un atributo
     search_fields = ['id', 'direccion', 'nombre']
     # añade una lista desplegable con la que podrás filtrar (activo es un atributo booleano)
-    list_filter = ['status']
+    list_filter = ['activo']
     fieldsets = (
         ('Datos Personales', {
-            'fields': ('nombre', 'direccion', 'postal', 'telefonos', 'email', 'tipodoc', 'documento', 'cuit', 'nacimiento', 'actividad')
+            'fields': ('nombre', 'direccion', 'postal', 'telefonos', 'email', 'tipodoc', 'documento', 'cuit', 'nacimiento', 'actividad', 'button_polizas', 'button_ordenes')
         }),
         (' ', {
             'fields': ('fecha', 'productor', 'seg_retiro', 'corresp')
@@ -43,13 +47,21 @@ class ClientesAdmin(admin.ModelAdmin):
             'fields': ('reg_num', 'reg_categ', 'reg_juris', 'reg_venc')
         }),
         ('Observaciones', {
-            'fields': ('observaciones', 'status')
+            'fields': ('observaciones', 'activo')
         }),
         (None, {
             'fields': ('zona_cza', 'fuente', 'descrip', 'establecim')
         })
     )
     inlines = [ClientesMediosdepagoInline, OrdenesInline, PolizasInline]
+    readonly_fields = ('button_polizas','button_ordenes')
+    
+    def button_polizas (self, request):
+        return format_html('<a id="lista_polizas_cliente" data-popup="yes" title="Polizas cliente" href="/admin/actividad/polizas/?q='+request.nombre+'&amp;_popup=1" target="_blank">Polizas cliente</a>')
+
+    def button_ordenes (self, request):
+        return format_html('<a id="lista_ordenes_cliente" data-popup="yes" title="Ordenes cliente" href="/admin/actividad/ordenes/?q='+request.nombre+'&amp;_popup=1" target="_blank">Ordenes cliente</a>')
+
 
 
 class CompaniasAdmin(admin.ModelAdmin):
@@ -58,6 +70,7 @@ class CompaniasAdmin(admin.ModelAdmin):
     search_fields = ['id', 'direccion', 'nombre', 'razon_social']
     list_filter = ['status']
     # inlines = [CompaniasInline]
+
 
 class OrdenesAdmin(admin.ModelAdmin):
     """ Clase con las configuraciones para el Admin de Ordenes """
@@ -109,10 +122,12 @@ class ProductoresAdmin(admin.ModelAdmin):
     search_fields = ['nombre', 'direccion']
     inlines = [CompaniasInline]
 
+
 class PolizasAdmin(admin.ModelAdmin):
     """ Clase con las configuraciones para el Admin de Productores """
     list_display = ['numero', 'vigencia_desde', 'vigencia_hasta']
-    search_fields = ['numero', 'vigencia_desde', 'vigencia_hasta']
+    search_fields = ['numero', 'cliente__nombre',
+                     'vigencia_desde', 'vigencia_hasta']
     fieldsets = (
         ('Orden', {
             'fields': ('numero', 'cliente', 'productor', 'organizador')

@@ -286,3 +286,19 @@ class Polizas(models.Model):
 
 #     class Meta:
 #         db_table = 'clientes_ordenes'
+
+
+
+class Cuotas(models.Model):
+    poliza_id = models.ForeignKey(Provincias, models.RESTRICT, blank=True, null=True, verbose_name='Poliza')
+    nro_cuota = models.IntegerField()
+    fecha_venc = models.DateField(blank=True, null=True)
+    importe = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    saldo = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    fecha_cancelacion = models.DateField(blank=True, null=True)
+    restante = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True) # 'usado por notas de credito (importe negativo) para informar cuanto queda disponible',
+    rendicion_id = models.IntegerField()
+    nro_comprobante = models.CharField(max_length=8)
+
+    class Meta:
+        db_table = 'cuotas_poliza'
