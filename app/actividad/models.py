@@ -264,30 +264,6 @@ class Polizas(models.Model):
         verbose_name = 'poliza'
         verbose_name_plural = 'polizas'
 
-# class ClientesPolizas(models.Model):
-#     status = models.BooleanField(default=True)
-#     clientes = models.ForeignKey(Clientes, models.DO_NOTHING)
-#     polizas = models.ForeignKey(Polizas, models.DO_NOTHING)
-
-#     def __str__(self):
-#         return str(self.clientes + " - " + self.polizas)
-
-#     class Meta:
-#         db_table = 'clientes_polizas'
-
-
-# class ClientesOrdenes(models.Model):
-#     status = models.BooleanField()
-#     cliente = models.ForeignKey(Clientes, models.DO_NOTHING)
-#     orden = models.ForeignKey(Ordenes, models.DO_NOTHING)
-
-#     def __str__(self):
-#         return str(self.orden + " - " + self.cliente)
-
-#     class Meta:
-#         db_table = 'clientes_ordenes'
-
-
 
 class Cuotas(models.Model):
     poliza_id = models.ForeignKey(Provincias, models.RESTRICT, blank=True, null=True, verbose_name='Poliza')
@@ -302,3 +278,13 @@ class Cuotas(models.Model):
 
     class Meta:
         db_table = 'cuotas_poliza'
+
+class Pagos(models.Model):
+    fecha = models.DateField(blank=True, null=True)
+    importe = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    tipo = models.CharField(max_length=2)
+    cuota_id = models.IntegerField()
+    comprobante_id = models.IntegerField()
+    
+    class Meta:
+        db_table = 'pagos_cuotas'
