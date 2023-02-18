@@ -3,7 +3,7 @@ import logging
 from django.contrib import admin
 from django.utils.html import format_html
 
-from .models import Clientes, Ordenes, Companias, Secciones, Productores, Polizas, ClientesMediosdepago
+from .models import Clientes, Cuotas, Ordenes, Companias, Pagos, Secciones, Productores, Polizas, ClientesMediosdepago
 
 
 class ClientesMediosdepagoInline(admin.TabularInline):
@@ -175,3 +175,5 @@ admin.site.register(Companias, CompaniasAdmin)
 admin.site.register(Secciones, SeccionesAdmin)
 admin.site.register(Productores, ProductoresAdmin)
 admin.site.register(Polizas, PolizasAdmin)
+admin.site.register(Cuotas)
+admin.site.register(Pagos)

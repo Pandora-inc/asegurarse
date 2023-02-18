@@ -262,7 +262,15 @@ class Polizas(models.Model):
     class Meta:
         db_table = 'polizas'
         verbose_name = 'poliza'
-        verbose_name_plural = 'polizas'
+        verbose_name_plural = 'polizas' 
+
+class rendiciones(models.Model):
+    status = models.BooleanField(default=True, verbose_name='Activo')
+    fecha = models.DateField(blank=True, null=True)
+    productor_id = models.ForeignKey(Productores, models.RESTRICT, blank=True, null=True, verbose_name='Productor')
+    fecha_cierre = models.DateField(blank=True, null=True)
+    total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    compania_id = models.ForeignKey(Companias, models.RESTRICT, blank=True, null=True, verbose_name='Compañía')
 
 
 class Cuotas(models.Model):
@@ -283,7 +291,7 @@ class Pagos(models.Model):
     fecha = models.DateField(blank=True, null=True)
     importe = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     tipo = models.CharField(max_length=2)
-    cuota_id = models.IntegerField()
+    cuota_id = models.ForeignKey(Cuotas, models.RESTRICT, blank=True, null=True, verbose_name='Cuotas')
     comprobante_id = models.IntegerField()
     
     class Meta:
