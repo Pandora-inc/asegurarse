@@ -3,6 +3,7 @@ import logging
 from django.contrib import admin
 from django.utils.html import format_html
 
+from .actions import get_button
 from .models import Clientes, Cuotas, Ordenes, Companias, Pagos, Secciones, Productores, Polizas, ClientesMediosdepago
 
 
@@ -57,10 +58,11 @@ class ClientesAdmin(admin.ModelAdmin):
     readonly_fields = ('button_polizas','button_ordenes')
     
     def button_polizas (self, request):
-        return format_html('<a id="lista_polizas_cliente" data-popup="yes" title="Polizas cliente" href="/admin/actividad/polizas/?q='+request.nombre+'&amp;_popup=1" target="_blank">Polizas cliente</a>')
+        return get_button("actividad", "polizas", request.nombre, "Polizas cliente")
 
     def button_ordenes (self, request):
-        return format_html('<a id="lista_ordenes_cliente" data-popup="yes" title="Ordenes cliente" href="/admin/actividad/ordenes/?q='+request.nombre+'&amp;_popup=1" target="_blank">Ordenes cliente</a>')
+        return get_button("actividad", "ordenes", request.nombre, "Ordenes cliente")
+        
 
 
 
