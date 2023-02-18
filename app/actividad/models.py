@@ -272,9 +272,19 @@ class Rendiciones(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     compania_id = models.ForeignKey(Companias, models.RESTRICT, blank=True, null=True, verbose_name='Compañía')
 
+
 class Tipos_comprobante (models.Model):
     descrip = models.CharField(max_length=20)
-  
+
+
+class Comprobantes (models.Model):
+    numero = models.CharField(max_length=32)
+    fecha = models.DateField(blank=True, null=True)
+    valor = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    restante = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    tipo = models.ForeignKey(Tipos_comprobante, models.RESTRICT, blank=True, null=True, verbose_name='Tipo')
+
+
 class Cuotas(models.Model):
     poliza_id = models.ForeignKey(Provincias, models.RESTRICT, blank=True, null=True, verbose_name='Poliza')
     nro_cuota = models.IntegerField()
@@ -284,7 +294,7 @@ class Cuotas(models.Model):
     fecha_cancelacion = models.DateField(blank=True, null=True)
     restante = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True) # 'usado por notas de credito (importe negativo) para informar cuanto queda disponible',
     rendicion_id = models.ForeignKey(Rendiciones, models.RESTRICT, blank=True, null=True, verbose_name='Rendicion')
-    nro_comprobante = models.CharField(max_length=8)
+    nro_comprobante = models.ForeignKey(Comprobantes, models.RESTRICT, blank=True, null=True, verbose_name='Comprobante')
 
     class Meta:
         db_table = 'cuotas_poliza'
