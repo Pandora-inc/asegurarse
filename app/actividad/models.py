@@ -264,7 +264,7 @@ class Polizas(models.Model):
         verbose_name = 'poliza'
         verbose_name_plural = 'polizas' 
 
-class rendiciones(models.Model):
+class Rendiciones(models.Model):
     status = models.BooleanField(default=True, verbose_name='Activo')
     fecha = models.DateField(blank=True, null=True)
     productor_id = models.ForeignKey(Productores, models.RESTRICT, blank=True, null=True, verbose_name='Productor')
@@ -272,7 +272,9 @@ class rendiciones(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     compania_id = models.ForeignKey(Companias, models.RESTRICT, blank=True, null=True, verbose_name='Compañía')
 
-
+class Tipos_comprobante (models.Model):
+    descrip = models.CharField(max_length=20)
+  
 class Cuotas(models.Model):
     poliza_id = models.ForeignKey(Provincias, models.RESTRICT, blank=True, null=True, verbose_name='Poliza')
     nro_cuota = models.IntegerField()
@@ -281,7 +283,7 @@ class Cuotas(models.Model):
     saldo = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     fecha_cancelacion = models.DateField(blank=True, null=True)
     restante = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True) # 'usado por notas de credito (importe negativo) para informar cuanto queda disponible',
-    rendicion_id = models.IntegerField()
+    rendicion_id = models.ForeignKey(Rendiciones, models.RESTRICT, blank=True, null=True, verbose_name='Rendicion')
     nro_comprobante = models.CharField(max_length=8)
 
     class Meta:
