@@ -1,9 +1,5 @@
 from django.db import models
 
-
-# Create your models here.
-
-
 class Banco(models.Model):
     descrip = models.CharField(max_length=32, blank=True, null=True)
 

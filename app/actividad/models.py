@@ -1,6 +1,6 @@
 """ Modelo de datos relacionados a la actividad """
 from django.db import models
-from parametros.models import Mediosdepago, Tiposdoc, Postal, Monedas, Tipospoliza, Tipospedido, Provincias, Organizador
+from parametros.models import Banco, Bancosucu, Mediosdepago, Tiposdoc, Postal, Monedas, Tipospoliza, Tipospedido, Provincias, Organizador
 
 
 
@@ -272,10 +272,18 @@ class Rendiciones(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     compania_id = models.ForeignKey(Companias, models.RESTRICT, blank=True, null=True, verbose_name='Compañía')
 
+    class Meta:
+        db_table = 'rendiciones'
+        verbose_name = 'Rendicion'
+        verbose_name_plural = 'Rendiciones' 
 
 class Tipos_comprobante (models.Model):
     descrip = models.CharField(max_length=20)
 
+    class Meta:
+        db_table = 'tipos_comprobantes'
+        verbose_name = 'Tipo de comprobante'
+        verbose_name_plural = 'Tipos de comprobante' 
 
 class Comprobantes (models.Model):
     numero = models.CharField(max_length=32)
@@ -284,6 +292,10 @@ class Comprobantes (models.Model):
     restante = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     tipo = models.ForeignKey(Tipos_comprobante, models.RESTRICT, blank=True, null=True, verbose_name='Tipo')
 
+    class Meta:
+        db_table = 'comprobantes'
+        verbose_name = 'Comprobante'
+        verbose_name_plural = 'Comprobantes' 
 
 class Cuotas(models.Model):
     poliza_id = models.ForeignKey(Provincias, models.RESTRICT, blank=True, null=True, verbose_name='Poliza')
@@ -298,6 +310,9 @@ class Cuotas(models.Model):
 
     class Meta:
         db_table = 'cuotas_poliza'
+        verbose_name = 'Cuota'
+        verbose_name_plural = 'Cuotas' 
+        unique_together = ['poliza_id', 'nro_cuota']
 
 class Pagos(models.Model):
     fecha = models.DateField(blank=True, null=True)
@@ -308,3 +323,23 @@ class Pagos(models.Model):
     
     class Meta:
         db_table = 'pagos_cuotas'
+        verbose_name = 'Pago'
+        verbose_name_plural = 'Pagos de cuotas' 
+
+
+class Cheques (models.Model):
+    status = models.BooleanField(default=True, verbose_name='Activo')
+    cliente_id = models.ForeignKey(Clientes, models.RESTRICT, blank=True, null=True, verbose_name='Cliente')
+    banco_id = models.ForeignKey(Banco, models.RESTRICT, blank=True, null=True, verbose_name='Banco')
+    sucursal_id = models.ForeignKey(Bancosucu, models.RESTRICT, blank=True, null=True, verbose_name='Sucursal')
+    numero = models.CharField(max_length=32)
+    fecha = models.DateField(blank=True, null=True)
+    fecha_ingreso = models.DateField(blank=True, null=True)
+    valor = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    restante = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    observaciones = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'cheques'
+        verbose_name = 'cheque'
+        verbose_name_plural = 'cheques' 
