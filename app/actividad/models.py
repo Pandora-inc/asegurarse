@@ -267,10 +267,10 @@ class Polizas(models.Model):
 class Rendiciones(models.Model):
     status = models.BooleanField(default=True, verbose_name='Activo')
     fecha = models.DateField(blank=True, null=True)
-    productor_id = models.ForeignKey(Productores, models.RESTRICT, blank=True, null=True, verbose_name='Productor')
+    productor = models.ForeignKey(Productores, models.RESTRICT, blank=True, null=True, verbose_name='Productor')
     fecha_cierre = models.DateField(blank=True, null=True)
     total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    compania_id = models.ForeignKey(Companias, models.RESTRICT, blank=True, null=True, verbose_name='Compañía')
+    compania = models.ForeignKey(Companias, models.RESTRICT, blank=True, null=True, verbose_name='Compañía')
 
     class Meta:
         db_table = 'rendiciones'
@@ -298,18 +298,18 @@ class Comprobantes (models.Model):
         verbose_name_plural = 'Comprobantes' 
 
 class Cuotas(models.Model):
-    poliza_id = models.ForeignKey(Provincias, models.RESTRICT, blank=True, null=True, verbose_name='Poliza')
+    poliza = models.ForeignKey(Polizas, models.RESTRICT, blank=True, null=True, verbose_name='Poliza')
     nro_cuota = models.IntegerField()
     fecha_venc = models.DateField(blank=True, null=True)
     importe = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     saldo = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     fecha_cancelacion = models.DateField(blank=True, null=True)
     restante = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True) # 'usado por notas de credito (importe negativo) para informar cuanto queda disponible',
-    rendicion_id = models.ForeignKey(Rendiciones, models.RESTRICT, blank=True, null=True, verbose_name='Rendicion')
+    rendicion = models.ForeignKey(Rendiciones, models.RESTRICT, blank=True, null=True, verbose_name='Rendicion')
     nro_comprobante = models.ForeignKey(Comprobantes, models.RESTRICT, blank=True, null=True, verbose_name='Comprobante')
-
+ 
     class Meta:
-        db_table = 'cuotas_poliza'
+        db_table = 'cuotas_polizas'
         verbose_name = 'Cuota'
         verbose_name_plural = 'Cuotas' 
         unique_together = ['poliza_id', 'nro_cuota']

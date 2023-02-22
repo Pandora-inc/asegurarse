@@ -1,4 +1,5 @@
 """ Configuraciones del Admin """
+import datetime
 import logging
 from django.contrib import admin
 from django.utils.html import format_html
@@ -35,8 +36,11 @@ class ClientesAdmin(admin.ModelAdmin):
     # añade una lista desplegable con la que podrás filtrar (activo es un atributo booleano)
     list_filter = ['activo']
     fieldsets = (
+        (id, {
+            'fields': ('button_polizas', 'button_ordenes', 'button_estado_cuenta')
+        }),
         ('Datos Personales', {
-            'fields': ('nombre', 'direccion', 'postal', 'telefonos', 'email', 'tipodoc', 'documento', 'cuit', 'nacimiento', 'actividad', 'button_polizas', 'button_ordenes')
+            'fields': ('nombre', 'direccion', 'postal', 'telefonos', 'email', 'tipodoc', 'documento', 'cuit', 'nacimiento', 'actividad')
         }),
         (' ', {
             'fields': ('fecha', 'productor', 'seg_retiro', 'corresp')
@@ -55,7 +59,7 @@ class ClientesAdmin(admin.ModelAdmin):
         })
     )
     inlines = [ClientesMediosdepagoInline, OrdenesInline, PolizasInline]
-    readonly_fields = ('button_polizas','button_ordenes')
+    readonly_fields = ('button_polizas','button_ordenes','button_estado_cuenta')
     
     def button_polizas (self, request):
         return get_button("actividad", "polizas", request.nombre, "Polizas cliente")
@@ -63,6 +67,8 @@ class ClientesAdmin(admin.ModelAdmin):
     def button_ordenes (self, request):
         return get_button("actividad", "ordenes", request.nombre, "Ordenes cliente")
         
+    def button_estado_cuenta (self, request):
+        return get_button("actividad", "cuotas", request.nombre, "Estado de cuenta")
 
 
 
@@ -167,6 +173,19 @@ class PolizasAdmin(admin.ModelAdmin):
     )
 
 
+class CuotasAdmin(admin.ModelAdmin):
+    
+    list_display = ['fecha_venc', 'poliza', 'nro_cuota', 'get_cuotas', 'importe', 'saldo', 'get_estado']
+    search_fields = ['fecha_venc', 'poliza__numero', 'nro_cuota', 'poliza_id__cliente__nombre', 'poliza_id__cant_cuotas', 'importe', 'saldo']
+
+    def get_estado(self, obj):
+        return "En termino" if obj.fecha_venc > datetime.date.today() else "Vencida"
+
+    def get_cuotas(self, obj):
+        return obj.poliza.cant_cuotas
+
+
+
 admin.site.site_header = "Asegurarse"
 admin.site.site_title = "Panel de control"
 
@@ -177,5 +196,5 @@ admin.site.register(Companias, CompaniasAdmin)
 admin.site.register(Secciones, SeccionesAdmin)
 admin.site.register(Productores, ProductoresAdmin)
 admin.site.register(Polizas, PolizasAdmin)
-admin.site.register(Cuotas)
+admin.site.register(Cuotas, CuotasAdmin)
 admin.site.register(Pagos)
