@@ -160,3 +160,15 @@ class Organizador(models.Model):
         db_table = 'organizadores'
         verbose_name = 'organizador'
         verbose_name_plural = 'organizadores'
+
+
+
+class Tipos_comprobante (models.Model):
+    descrip = models.CharField(max_length=20)
+
+    def __str__(self):
+        return str(self.descrip)
+    class Meta:
+        db_table = 'tipos_comprobante'
+        verbose_name = 'Tipo de comprobante'
+        verbose_name_plural = 'Tipos de comprobante' 
