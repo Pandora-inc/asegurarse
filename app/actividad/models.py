@@ -93,7 +93,7 @@ class Clientes(models.Model):
     # polizas = models.ManyToManyField('Polizas', blank=True, null=True)
 
     def __str__(self):
-        return str(self.nombre)
+        return str(self.id) + ' - ' + str(self.nombre)
 
     class Meta:
         db_table = 'clientes'
@@ -272,6 +272,8 @@ class Rendiciones(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     compania = models.ForeignKey(Companias, models.RESTRICT, blank=True, null=True, verbose_name='Compañía')
 
+    def __str__(self):
+        return str(self.id) + ' - ' + str(self.productor)
     class Meta:
         db_table = 'rendiciones'
         verbose_name = 'Rendicion'

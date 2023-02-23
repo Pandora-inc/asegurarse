@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from .actions import get_button, get_button_new
-from .models import Cheques, Clientes, Comprobantes, Cuotas, Ordenes, Companias, Pagos, Secciones, Productores, Polizas, ClientesMediosdepago
+from .models import Cheques, Clientes, Comprobantes, Cuotas, Ordenes, Companias, Pagos, Rendiciones, Secciones, Productores, Polizas, ClientesMediosdepago
 
 
 class ClientesMediosdepagoInline(admin.TabularInline):
@@ -216,6 +216,15 @@ class ComprobantesAdmin(admin.ModelAdmin):
     list_display = ['numero', 'cliente', 'fecha', 'valor', 'restante', 'tipo']
     search_fields = ['numero', 'fecha', 'valor', 'restante', 'tipo__descrip', 'cliente__nombre']
 
+
+class RendicionesAdmin(admin.ModelAdmin):
+    
+    list_display = ['fecha', 'productor', 'fecha_cierre', 'total', 'compania']
+    search_fields = ['fecha', 'productor__nombre', 'fecha_cierre', 'total', 'compania__nombre']
+
+
+
+
 admin.site.site_header = "Asegurarse"
 admin.site.site_title = "Panel de control"
 
@@ -231,3 +240,5 @@ admin.site.register(Cuotas, CuotasAdmin)
 admin.site.register(Pagos, PagosAdmin)
 admin.site.register(Cheques, ChequesAdmin)
 admin.site.register(Comprobantes, ComprobantesAdmin)
+
+admin.site.register(Rendiciones, RendicionesAdmin)
