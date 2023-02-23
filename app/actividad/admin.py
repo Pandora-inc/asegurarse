@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from .actions import get_button
-from .models import Clientes, Cuotas, Ordenes, Companias, Pagos, Secciones, Productores, Polizas, ClientesMediosdepago
+from .models import Cheques, Clientes, Cuotas, Ordenes, Companias, Pagos, Secciones, Productores, Polizas, ClientesMediosdepago
 
 
 class ClientesMediosdepagoInline(admin.TabularInline):
@@ -37,7 +37,7 @@ class ClientesAdmin(admin.ModelAdmin):
     list_filter = ['activo']
     fieldsets = (
         (id, {
-            'fields': ('button_polizas', 'button_ordenes', 'button_estado_cuenta')
+            'fields': ('button_polizas', 'button_ordenes', 'button_estado_cuenta', 'button_pagos', 'button_cheques')
         }),
         ('Datos Personales', {
             'fields': ('nombre', 'direccion', 'postal', 'telefonos', 'email', 'tipodoc', 'documento', 'cuit', 'nacimiento', 'actividad')
@@ -55,11 +55,11 @@ class ClientesAdmin(admin.ModelAdmin):
             'fields': ('observaciones', 'activo')
         }),
         (None, {
-            'fields': ('zona_cza', 'fuente', 'descrip', 'establecim')
+            'fields': ('zona_cza', 'fuente', 'descrip', 'establecim', 'button_cheques')
         })
     )
     inlines = [ClientesMediosdepagoInline, OrdenesInline, PolizasInline]
-    readonly_fields = ('button_polizas','button_ordenes','button_estado_cuenta')
+    readonly_fields = ('button_polizas','button_ordenes','button_estado_cuenta','button_pagos')
     
     def button_polizas (self, request):
         return get_button("actividad", "polizas", request.nombre, "Polizas cliente")
@@ -69,7 +69,12 @@ class ClientesAdmin(admin.ModelAdmin):
         
     def button_estado_cuenta (self, request):
         return get_button("actividad", "cuotas", request.nombre, "Estado de cuenta")
-
+        
+    def button_pagos (self, request):
+        return get_button("actividad", "pagos", request.nombre, "Pagos realizados")
+        
+    def button_cheques (self, request):
+        return get_button_new("actividad", "cheques", "Ingresar cheque")
 
 
 class CompaniasAdmin(admin.ModelAdmin):
@@ -179,10 +184,32 @@ class CuotasAdmin(admin.ModelAdmin):
     search_fields = ['fecha_venc', 'poliza__numero', 'nro_cuota', 'poliza_id__cliente__nombre', 'poliza_id__cant_cuotas', 'importe', 'saldo']
 
     def get_estado(self, obj):
+        # TODO Aca debe duscar el numero de cueto dentro de la tabla pagos para asegurarse de si esta paga
         return "En termino" if obj.fecha_venc > datetime.date.today() else "Vencida"
 
     def get_cuotas(self, obj):
         return obj.poliza.cant_cuotas
+
+
+class PagosAdmin(admin.ModelAdmin):
+    
+    list_display = ['get_vencimiento', 'get_poliza', 'cuota', 'get_cuotas', 'importe']
+    search_fields = ['cuota__poliza_id__cliente__nombre']
+
+    def get_poliza(self, obj):
+        return obj.cuota.poliza
+
+    def get_vencimiento(self, obj):
+        return obj.cuota.fecha_venc
+
+    def get_cuotas(self, obj):
+        return str(obj.cuota.nro_cuota) + " / " + str(obj.cuota.poliza.cant_cuotas) 
+
+
+class ChequesAdmin(admin.ModelAdmin):
+    
+    list_display = ['cliente', 'fecha', 'numero', 'valor', 'banco', 'sucursal']
+    search_fields = ['cliente__nombre', 'numero', 'fecha']
 
 
 
@@ -196,5 +223,6 @@ admin.site.register(Companias, CompaniasAdmin)
 admin.site.register(Secciones, SeccionesAdmin)
 admin.site.register(Productores, ProductoresAdmin)
 admin.site.register(Polizas, PolizasAdmin)
-admin.site.register(Cuotas, CuotasAdmin)
-admin.site.register(Pagos)
+# admin.site.register(Cuotas, CuotasAdmin)
+# admin.site.register(Pagos, PagosAdmin)
+admin.site.register(Cheques)

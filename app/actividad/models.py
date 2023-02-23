@@ -280,6 +280,8 @@ class Rendiciones(models.Model):
 class Tipos_comprobante (models.Model):
     descrip = models.CharField(max_length=20)
 
+    def __str__(self):
+        return str(self.descrip)
     class Meta:
         db_table = 'tipos_comprobantes'
         verbose_name = 'Tipo de comprobante'
@@ -292,6 +294,8 @@ class Comprobantes (models.Model):
     restante = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     tipo = models.ForeignKey(Tipos_comprobante, models.RESTRICT, blank=True, null=True, verbose_name='Tipo')
 
+    def __str__(self):
+        return str(self.numero)
     class Meta:
         db_table = 'comprobantes'
         verbose_name = 'Comprobante'
@@ -308,6 +312,8 @@ class Cuotas(models.Model):
     rendicion = models.ForeignKey(Rendiciones, models.RESTRICT, blank=True, null=True, verbose_name='Rendicion')
     nro_comprobante = models.ForeignKey(Comprobantes, models.RESTRICT, blank=True, null=True, verbose_name='Comprobante')
  
+    def __str__(self):
+        return str(self.nro_cuota)
     class Meta:
         db_table = 'cuotas_polizas'
         verbose_name = 'Cuota'
@@ -318,9 +324,11 @@ class Pagos(models.Model):
     fecha = models.DateField(blank=True, null=True)
     importe = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     tipo = models.CharField(max_length=2)
-    cuota_id = models.ForeignKey(Cuotas, models.RESTRICT, blank=True, null=True, verbose_name='Cuotas')
-    comprobante_id = models.IntegerField()
+    cuota = models.ForeignKey(Cuotas, models.RESTRICT, blank=True, null=True, verbose_name='Cuota')
+    comprobante = models.ForeignKey(Comprobantes, models.RESTRICT, blank=True, null=True, verbose_name='Comprobante')
     
+    def __str__(self):
+        return str(self.importe)
     class Meta:
         db_table = 'pagos_cuotas'
         verbose_name = 'Pago'
@@ -329,9 +337,9 @@ class Pagos(models.Model):
 
 class Cheques (models.Model):
     status = models.BooleanField(default=True, verbose_name='Activo')
-    cliente_id = models.ForeignKey(Clientes, models.RESTRICT, blank=True, null=True, verbose_name='Cliente')
-    banco_id = models.ForeignKey(Banco, models.RESTRICT, blank=True, null=True, verbose_name='Banco')
-    sucursal_id = models.ForeignKey(Bancosucu, models.RESTRICT, blank=True, null=True, verbose_name='Sucursal')
+    cliente = models.ForeignKey(Clientes, models.RESTRICT, blank=True, null=True, verbose_name='Cliente')
+    banco = models.ForeignKey(Banco, models.RESTRICT, blank=True, null=True, verbose_name='Banco')
+    sucursal = models.ForeignKey(Bancosucu, models.RESTRICT, blank=True, null=True, verbose_name='Sucursal')
     numero = models.CharField(max_length=32)
     fecha = models.DateField(blank=True, null=True)
     fecha_ingreso = models.DateField(blank=True, null=True)
@@ -339,6 +347,8 @@ class Cheques (models.Model):
     restante = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     observaciones = models.TextField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.numero)
     class Meta:
         db_table = 'cheques'
         verbose_name = 'cheque'

@@ -4,6 +4,8 @@ Conjunto de funciones y métodos para la asistencia en el sistema
 
 from django.utils.html import format_html
 
+FORMATO = "width=700,height=500,status=no,location=no,toolbar=no"
+
 
 def get_button(esquema, modelo, param, titulo):
     """
@@ -17,10 +19,20 @@ def get_button(esquema, modelo, param, titulo):
         status=no,location=no,toolbar=no')" value="Polizas cliente">
 
     """
-    formato = "width=500,height=600,status=no,location=no,toolbar=no"
     direccion = '/admin/'+esquema+'/'+modelo+'/?q='+param+'&amp;_popup=1'
 
-    win = direccion+'\', \''+titulo+'\',\''+formato
-    to_format = '<input type="button" onclick="window.open(\''+win+'\')" value="'+titulo+'" />'
+    win = direccion+'\', \''+titulo+'\',\''+FORMATO
+    to_format = get_button_link(win, titulo)
 
     return format_html(to_format)
+
+def get_button_new(esquema, modelo, titulo):
+    direccion = '/admin/'+esquema+'/'+modelo+'/add/'
+
+    win = direccion+'\', \''+titulo+'\',\''+FORMATO
+    to_format = get_button_link(win, titulo)
+
+    return format_html(to_format)
+
+def get_button_link(direccion, titulo):
+    return '<input type="button" onclick="window.open(\''+direccion+'\')" value="'+titulo+'" />'
