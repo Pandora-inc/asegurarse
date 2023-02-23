@@ -4,7 +4,7 @@ import logging
 from django.contrib import admin
 from django.utils.html import format_html
 
-from .actions import get_button
+from .actions import get_button, get_button_new
 from .models import Cheques, Clientes, Cuotas, Ordenes, Companias, Pagos, Secciones, Productores, Polizas, ClientesMediosdepago
 
 
@@ -55,11 +55,11 @@ class ClientesAdmin(admin.ModelAdmin):
             'fields': ('observaciones', 'activo')
         }),
         (None, {
-            'fields': ('zona_cza', 'fuente', 'descrip', 'establecim', 'button_cheques')
+            'fields': ('zona_cza', 'fuente', 'descrip', 'establecim')
         })
     )
     inlines = [ClientesMediosdepagoInline, OrdenesInline, PolizasInline]
-    readonly_fields = ('button_polizas','button_ordenes','button_estado_cuenta','button_pagos')
+    readonly_fields = ('button_polizas','button_ordenes','button_estado_cuenta','button_pagos', 'button_cheques')
     
     def button_polizas (self, request):
         return get_button("actividad", "polizas", request.nombre, "Polizas cliente")
@@ -223,6 +223,7 @@ admin.site.register(Companias, CompaniasAdmin)
 admin.site.register(Secciones, SeccionesAdmin)
 admin.site.register(Productores, ProductoresAdmin)
 admin.site.register(Polizas, PolizasAdmin)
-# admin.site.register(Cuotas, CuotasAdmin)
-# admin.site.register(Pagos, PagosAdmin)
+admin.site.register(Cuotas, CuotasAdmin)
+
+admin.site.register(Pagos, PagosAdmin)
 admin.site.register(Cheques)
