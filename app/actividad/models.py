@@ -1,6 +1,6 @@
 """ Modelo de datos relacionados a la actividad """
 from django.db import models
-from parametros.models import Mediosdepago, Tiposdoc, Postal, Monedas, Tipospoliza, Tipospedido, Provincias, Organizador
+from parametros.models import Banco, Bancosucu, Mediosdepago, Tiposdoc, Postal, Monedas, Tipospoliza, Tipospedido, Provincias, Organizador
 
 
 
@@ -262,27 +262,94 @@ class Polizas(models.Model):
     class Meta:
         db_table = 'polizas'
         verbose_name = 'poliza'
-        verbose_name_plural = 'polizas'
+        verbose_name_plural = 'polizas' 
 
-# class ClientesPolizas(models.Model):
-#     status = models.BooleanField(default=True)
-#     clientes = models.ForeignKey(Clientes, models.DO_NOTHING)
-#     polizas = models.ForeignKey(Polizas, models.DO_NOTHING)
+class Rendiciones(models.Model):
+    status = models.BooleanField(default=True, verbose_name='Activo')
+    fecha = models.DateField(blank=True, null=True)
+    productor = models.ForeignKey(Productores, models.RESTRICT, blank=True, null=True, verbose_name='Productor')
+    fecha_cierre = models.DateField(blank=True, null=True)
+    total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    compania = models.ForeignKey(Companias, models.RESTRICT, blank=True, null=True, verbose_name='Compañía')
 
-#     def __str__(self):
-#         return str(self.clientes + " - " + self.polizas)
+    class Meta:
+        db_table = 'rendiciones'
+        verbose_name = 'Rendicion'
+        verbose_name_plural = 'Rendiciones' 
 
-#     class Meta:
-#         db_table = 'clientes_polizas'
+class Tipos_comprobante (models.Model):
+    descrip = models.CharField(max_length=20)
+
+    def __str__(self):
+        return str(self.descrip)
+    class Meta:
+        db_table = 'tipos_comprobantes'
+        verbose_name = 'Tipo de comprobante'
+        verbose_name_plural = 'Tipos de comprobante' 
+
+class Comprobantes (models.Model):
+    numero = models.CharField(max_length=32)
+    fecha = models.DateField(blank=True, null=True)
+    valor = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    restante = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    tipo = models.ForeignKey(Tipos_comprobante, models.RESTRICT, blank=True, null=True, verbose_name='Tipo')
+
+    def __str__(self):
+        return str(self.numero)
+    class Meta:
+        db_table = 'comprobantes'
+        verbose_name = 'Comprobante'
+        verbose_name_plural = 'Comprobantes' 
+
+class Cuotas(models.Model):
+    poliza = models.ForeignKey(Polizas, models.RESTRICT, blank=True, null=True, verbose_name='Poliza')
+    nro_cuota = models.IntegerField()
+    fecha_venc = models.DateField(blank=True, null=True)
+    importe = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    saldo = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    fecha_cancelacion = models.DateField(blank=True, null=True)
+    restante = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True) # 'usado por notas de credito (importe negativo) para informar cuanto queda disponible',
+    rendicion = models.ForeignKey(Rendiciones, models.RESTRICT, blank=True, null=True, verbose_name='Rendicion')
+    nro_comprobante = models.ForeignKey(Comprobantes, models.RESTRICT, blank=True, null=True, verbose_name='Comprobante')
+ 
+    def __str__(self):
+        return str(self.nro_cuota)
+    class Meta:
+        db_table = 'cuotas_polizas'
+        verbose_name = 'Cuota'
+        verbose_name_plural = 'Cuotas' 
+        unique_together = ['poliza_id', 'nro_cuota']
+
+class Pagos(models.Model):
+    fecha = models.DateField(blank=True, null=True)
+    importe = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    tipo = models.CharField(max_length=2)
+    cuota = models.ForeignKey(Cuotas, models.RESTRICT, blank=True, null=True, verbose_name='Cuota')
+    comprobante = models.ForeignKey(Comprobantes, models.RESTRICT, blank=True, null=True, verbose_name='Comprobante')
+    
+    def __str__(self):
+        return str(self.importe)
+    class Meta:
+        db_table = 'pagos_cuotas'
+        verbose_name = 'Pago'
+        verbose_name_plural = 'Pagos de cuotas' 
 
 
-# class ClientesOrdenes(models.Model):
-#     status = models.BooleanField()
-#     cliente = models.ForeignKey(Clientes, models.DO_NOTHING)
-#     orden = models.ForeignKey(Ordenes, models.DO_NOTHING)
+class Cheques (models.Model):
+    status = models.BooleanField(default=True, verbose_name='Activo')
+    cliente = models.ForeignKey(Clientes, models.RESTRICT, blank=True, null=True, verbose_name='Cliente')
+    banco = models.ForeignKey(Banco, models.RESTRICT, blank=True, null=True, verbose_name='Banco')
+    sucursal = models.ForeignKey(Bancosucu, models.RESTRICT, blank=True, null=True, verbose_name='Sucursal')
+    numero = models.CharField(max_length=32)
+    fecha = models.DateField(blank=True, null=True)
+    fecha_ingreso = models.DateField(blank=True, null=True)
+    valor = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    restante = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    observaciones = models.TextField(blank=True, null=True)
 
-#     def __str__(self):
-#         return str(self.orden + " - " + self.cliente)
-
-#     class Meta:
-#         db_table = 'clientes_ordenes'
+    def __str__(self):
+        return str(self.numero)
+    class Meta:
+        db_table = 'cheques'
+        verbose_name = 'cheque'
+        verbose_name_plural = 'cheques' 

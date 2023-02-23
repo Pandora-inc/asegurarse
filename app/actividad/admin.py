@@ -1,16 +1,22 @@
 """ Configuraciones del Admin """
+import datetime
+import logging
 from django.contrib import admin
+from django.utils.html import format_html
 
-from .models import Clientes, Ordenes, Companias, Secciones, Productores, Polizas, ClientesMediosdepago
+from .actions import get_button, get_button_new
+from .models import Cheques, Clientes, Cuotas, Ordenes, Companias, Pagos, Secciones, Productores, Polizas, ClientesMediosdepago
 
 
 class ClientesMediosdepagoInline(admin.TabularInline):
     model = ClientesMediosdepago
     extra = 0
 
+
 class OrdenesInline(admin.TabularInline):
     model = Ordenes
     extra = 0
+
 
 class PolizasInline(admin.TabularInline):
     model = Polizas
@@ -28,8 +34,11 @@ class ClientesAdmin(admin.ModelAdmin):
     # añade un campo de texto para realizar la búsqueda, puedes añadir mas de un atributo
     search_fields = ['id', 'direccion', 'nombre']
     # añade una lista desplegable con la que podrás filtrar (activo es un atributo booleano)
-    list_filter = ['status']
+    list_filter = ['activo']
     fieldsets = (
+        (id, {
+            'fields': ('button_polizas', 'button_ordenes', 'button_estado_cuenta', 'button_pagos', 'button_cheques')
+        }),
         ('Datos Personales', {
             'fields': ('nombre', 'direccion', 'postal', 'telefonos', 'email', 'tipodoc', 'documento', 'cuit', 'nacimiento', 'actividad')
         }),
@@ -43,13 +52,29 @@ class ClientesAdmin(admin.ModelAdmin):
             'fields': ('reg_num', 'reg_categ', 'reg_juris', 'reg_venc')
         }),
         ('Observaciones', {
-            'fields': ('observaciones', 'status')
+            'fields': ('observaciones', 'activo')
         }),
         (None, {
             'fields': ('zona_cza', 'fuente', 'descrip', 'establecim')
         })
     )
     inlines = [ClientesMediosdepagoInline, OrdenesInline, PolizasInline]
+    readonly_fields = ('button_polizas','button_ordenes','button_estado_cuenta','button_pagos', 'button_cheques')
+    
+    def button_polizas (self, request):
+        return get_button("actividad", "polizas", request.nombre, "Polizas cliente")
+
+    def button_ordenes (self, request):
+        return get_button("actividad", "ordenes", request.nombre, "Ordenes cliente")
+        
+    def button_estado_cuenta (self, request):
+        return get_button("actividad", "cuotas", request.nombre, "Estado de cuenta")
+        
+    def button_pagos (self, request):
+        return get_button("actividad", "pagos", request.nombre, "Pagos realizados")
+        
+    def button_cheques (self, request):
+        return get_button_new("actividad", "cheques", "Ingresar cheque")
 
 
 class CompaniasAdmin(admin.ModelAdmin):
@@ -58,6 +83,7 @@ class CompaniasAdmin(admin.ModelAdmin):
     search_fields = ['id', 'direccion', 'nombre', 'razon_social']
     list_filter = ['status']
     # inlines = [CompaniasInline]
+
 
 class OrdenesAdmin(admin.ModelAdmin):
     """ Clase con las configuraciones para el Admin de Ordenes """
@@ -109,10 +135,12 @@ class ProductoresAdmin(admin.ModelAdmin):
     search_fields = ['nombre', 'direccion']
     inlines = [CompaniasInline]
 
+
 class PolizasAdmin(admin.ModelAdmin):
     """ Clase con las configuraciones para el Admin de Productores """
     list_display = ['numero', 'vigencia_desde', 'vigencia_hasta']
-    search_fields = ['numero', 'vigencia_desde', 'vigencia_hasta']
+    search_fields = ['numero', 'cliente__nombre',
+                     'vigencia_desde', 'vigencia_hasta']
     fieldsets = (
         ('Orden', {
             'fields': ('numero', 'cliente', 'productor', 'organizador')
@@ -150,6 +178,41 @@ class PolizasAdmin(admin.ModelAdmin):
     )
 
 
+class CuotasAdmin(admin.ModelAdmin):
+    
+    list_display = ['fecha_venc', 'poliza', 'nro_cuota', 'get_cuotas', 'importe', 'saldo', 'get_estado']
+    search_fields = ['fecha_venc', 'poliza__numero', 'nro_cuota', 'poliza_id__cliente__nombre', 'poliza_id__cant_cuotas', 'importe', 'saldo']
+
+    def get_estado(self, obj):
+        # TODO Aca debe duscar el numero de cueto dentro de la tabla pagos para asegurarse de si esta paga
+        return "En termino" if obj.fecha_venc > datetime.date.today() else "Vencida"
+
+    def get_cuotas(self, obj):
+        return obj.poliza.cant_cuotas
+
+
+class PagosAdmin(admin.ModelAdmin):
+    
+    list_display = ['get_vencimiento', 'get_poliza', 'cuota', 'get_cuotas', 'importe']
+    search_fields = ['cuota__poliza_id__cliente__nombre']
+
+    def get_poliza(self, obj):
+        return obj.cuota.poliza
+
+    def get_vencimiento(self, obj):
+        return obj.cuota.fecha_venc
+
+    def get_cuotas(self, obj):
+        return str(obj.cuota.nro_cuota) + " / " + str(obj.cuota.poliza.cant_cuotas) 
+
+
+class ChequesAdmin(admin.ModelAdmin):
+    
+    list_display = ['cliente', 'fecha', 'numero', 'valor', 'banco', 'sucursal']
+    search_fields = ['cliente__nombre', 'numero', 'fecha']
+
+
+
 admin.site.site_header = "Asegurarse"
 admin.site.site_title = "Panel de control"
 
@@ -160,3 +223,7 @@ admin.site.register(Companias, CompaniasAdmin)
 admin.site.register(Secciones, SeccionesAdmin)
 admin.site.register(Productores, ProductoresAdmin)
 admin.site.register(Polizas, PolizasAdmin)
+admin.site.register(Cuotas, CuotasAdmin)
+
+admin.site.register(Pagos, PagosAdmin)
+admin.site.register(Cheques)
