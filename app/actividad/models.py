@@ -1,6 +1,6 @@
 """ Modelo de datos relacionados a la actividad """
 from django.db import models
-from parametros.models import Banco, Bancosucu, Mediosdepago, Tiposdoc, Postal, Monedas, Tipospoliza, Tipospedido, Provincias, Organizador
+from parametros.models import Banco, Bancosucu, Mediosdepago, Tiposdoc, Postal, Monedas, Tipospoliza, Tipospedido, Provincias, Organizador, Tipos_comprobante
 
 
 
@@ -93,7 +93,7 @@ class Clientes(models.Model):
     # polizas = models.ManyToManyField('Polizas', blank=True, null=True)
 
     def __str__(self):
-        return str(self.nombre)
+        return str(self.id) + ' - ' + str(self.nombre)
 
     class Meta:
         db_table = 'clientes'
@@ -272,22 +272,15 @@ class Rendiciones(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     compania = models.ForeignKey(Companias, models.RESTRICT, blank=True, null=True, verbose_name='Compañía')
 
+    def __str__(self):
+        return str(self.id) + ' - ' + str(self.productor)
     class Meta:
         db_table = 'rendiciones'
         verbose_name = 'Rendicion'
         verbose_name_plural = 'Rendiciones' 
 
-class Tipos_comprobante (models.Model):
-    descrip = models.CharField(max_length=20)
-
-    def __str__(self):
-        return str(self.descrip)
-    class Meta:
-        db_table = 'tipos_comprobantes'
-        verbose_name = 'Tipo de comprobante'
-        verbose_name_plural = 'Tipos de comprobante' 
-
 class Comprobantes (models.Model):
+    cliente = models.ForeignKey(Clientes, models.RESTRICT, blank=True, null=True, verbose_name='Cliente')
     numero = models.CharField(max_length=32)
     fecha = models.DateField(blank=True, null=True)
     valor = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
