@@ -4,6 +4,8 @@ import logging
 from django.contrib import admin
 from django.utils.html import format_html
 
+from .forms import PolizasCustomForm
+
 from .actions import get_button, get_button_new
 from .models import Cheques, Clientes, Comprobantes, Cuotas, Ordenes, Companias, Pagos, Rendiciones, Secciones, Productores, Polizas, ClientesMediosdepago
 
@@ -222,6 +224,14 @@ class RendicionesAdmin(admin.ModelAdmin):
     list_display = ['fecha', 'productor', 'fecha_cierre', 'total', 'compania']
     search_fields = ['fecha', 'productor__nombre', 'fecha_cierre', 'total', 'compania__nombre']
 
+class NuevoPolizasAdmin(admin.ModelAdmin):
+    form = PolizasCustomForm
+
+    ordering = ['numero']
+    list_display = ['numero', 'vigencia_desde', 'vigencia_hasta']
+    search_fields = ['numero', 'cliente__nombre',
+                     'vigencia_desde', 'vigencia_hasta']
+
 
 
 
@@ -234,7 +244,7 @@ admin.site.register(Ordenes, OrdenesAdmin)
 admin.site.register(Companias, CompaniasAdmin)
 admin.site.register(Secciones, SeccionesAdmin)
 admin.site.register(Productores, ProductoresAdmin)
-admin.site.register(Polizas, PolizasAdmin)
+# admin.site.register(Polizas, PolizasAdmin)
 admin.site.register(Cuotas, CuotasAdmin)
 
 admin.site.register(Pagos, PagosAdmin)
@@ -242,3 +252,5 @@ admin.site.register(Cheques, ChequesAdmin)
 admin.site.register(Comprobantes, ComprobantesAdmin)
 
 admin.site.register(Rendiciones, RendicionesAdmin)
+
+admin.site.register(Polizas, NuevoPolizasAdmin)

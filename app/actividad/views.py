@@ -2,10 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView
-
-from .forms import CompaniaForm
-from .models import Clientes, Companias, Secciones, Productores, Ordenes
 from django.core.paginator import Paginator
+from django.utils import timezone
+
+from .forms import CompaniaForm, VencimientoPolizasForm
+from .models import Clientes, Companias, Secciones, Productores, Ordenes, Polizas
 
 
 # Create your views here.
@@ -100,3 +101,41 @@ def productores(request):
         'lista_productores': page_obj,
         'col': 0
     })
+
+
+
+def vencimiento_polizas(request):
+    if request.method == "POST":
+        form = VencimientoPolizasForm(request.POST)
+        # fields = ("productor", "seccion", "vigencia_desde", "vigencia_hasta")
+        # seccion = request.seccion
+        productor = request.POST.get('productor', '*')
+        seccion = request.POST.get('seccion', '*')
+        vigencia_desde = request.POST.get('vigencia_desde', '*')
+        vigencia_hasta = request.POST.get('vigencia_hasta',timezone.now())
+
+        q = {}
+
+        if vigencia_hasta:
+            q['vigencia_hasta__lte'] = vigencia_hasta
+        else:
+            vigencia_hasta = timezone.now()
+            q['vigencia_hasta__lte'] = vigencia_hasta
+            
+        if vigencia_desde:
+            q['vigencia_desde'] = vigencia_desde
+            
+        if seccion:
+            q['seccion'] = seccion
+            
+        if productor:
+            q['productor'] = productor
+
+        print(q)
+
+        if form.is_valid():
+            polizas = Polizas.objects.filter(**q).order_by('vigencia_hasta')
+            return render(request, 'vto_polizas.html', {'polizas': polizas})
+    else:
+        form = VencimientoPolizasForm()
+        return render(request, 'vto_polizas.html', {'form': form})

@@ -1,0 +1,61 @@
+<html>
+<body>
+    {% block content %}
+        <h2>Vencimiento de Polizas</h2>
+        <form method="POST" class="post-form">{% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="save btn btn-default">Save</button>
+        </form>
+    {% endblock %}    
+
+
+    <div class="results">
+        <table id="result_list">
+            <thead>
+                <tr>
+                    <th scope="col" class="action-checkbox-column">
+                        <div class="text"><span><input type="checkbox" id="action-toggle"></span></div>
+                        <div class="clear"></div>
+                    </th>
+                    <th scope="col" class="sortable column-cliente">
+                        <div class="text"><a href="?o=1">Productor</a></div>
+                        <div class="clear"></div>
+                    </th>
+                    <th scope="col" class="sortable column-fecha">
+                        <div class="text"><a href="?o=2">Poliza</a></div>
+                        <div class="clear"></div>
+                    </th>
+                    <th scope="col" class="sortable column-numero">
+                        <div class="text"><a href="?o=3">Cliente</a></div>
+                        <div class="clear"></div>
+                    </th>
+                    <th scope="col" class="sortable column-valor">
+                        <div class="text"><a href="?o=4">Compania</a></div>
+                        <div class="clear"></div>
+                    </th>
+                    <th scope="col" class="sortable column-banco">
+                        <div class="text"><a href="?o=5">Seccion</a></div>
+                        <div class="clear"></div>
+                    </th>
+                    <th scope="col" class="sortable column-sucursal">
+                        <div class="text"><a href="?o=6">Vencimiento</a></div>
+                        <div class="clear"></div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for poliza in polizas %}
+                <tr>
+                    <td class="action-checkbox"><input type="checkbox" name="_selected_action" value="1" class="action-select"></td>
+                    <th class="field-productor nowrap"><a href="#">{{ poliza.productor }}</a></th>
+                    <td class="field-poliza nowrap">{{ poliza.numero }}</td>
+                    <td class="field-cliente">{{ poliza.cliente }}</td>
+                    <td class="field-compania">{{ poliza.compania }}</td>
+                    <td class="field-seccion nowrap">{{ poliza.seccion }}</td>
+                    <td class="field-vencimiento nowrap">{{ poliza.vigencia_hasta }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
