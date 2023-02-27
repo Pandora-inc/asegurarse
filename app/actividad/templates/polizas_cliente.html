@@ -1,0 +1,39 @@
+    <div class="results">
+        <table id="result_list">
+            <thead>
+                <tr>
+                    <th scope="col" class="action-checkbox-column">
+                        <div class="text"><span><input type="checkbox" id="action-toggle"></span></div>
+                        <div class="clear"></div>
+                    </th>
+                    <th scope="col" class="sortable column-cliente">
+                        <div class="text"><a href="?o=1">Orden</a></div>
+                        <div class="clear"></div>
+                    </th>
+                    <th scope="col" class="sortable column-numero">
+                        <div class="text"><a href="?o=2">Cliente</a></div>
+                        <div class="clear"></div>
+                    </th>
+                    <th scope="col" class="sortable column-fecha">
+                        <div class="text"><a href="?o=3">Poliza</a></div>
+                        <div class="clear"></div>
+                    </th>
+                    <th scope="col" class="sortable column-sucursal">
+                        <div class="text"><a href="?o=4">Vencimiento</a></div>
+                        <div class="clear"></div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for poliza in polizas %}
+                <tr>
+                    <td class="action-checkbox"><input type="checkbox" name="_selected_action" value="1" class="action-select"></td>
+                    <th class="field-orden nowrap"><a href="#">{{ poliza.orden }}</a></th>
+                    <td class="field-cliente">{{ poliza.cliente }}</td>
+                    <td class="field-poliza nowrap">{{ poliza.numero }}</td>
+                    <td class="field-vencimiento nowrap">{{ poliza.vigencia_hasta }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
