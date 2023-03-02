@@ -4,8 +4,9 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView
 from django.core.paginator import Paginator
 from django.utils import timezone
+from django.db import connection
 
-from .forms import ClientesPolizasForm, CompaniaForm, VencimientoPolizasForm
+from .forms import ClientesPolizasForm, CompaniaForm, LibrosRubricadosForm, VencimientoPolizasForm
 from .models import Clientes, Companias, Secciones, Productores, Ordenes, Polizas
 
 
@@ -28,6 +29,7 @@ def clientes(request):
         'col': 1
     })
 
+
 def listarOrdenes(request):
     ordenes = Ordenes.objects.select_related('cliente').order_by('-numero').only(
         "numero", "orden_productor", "cliente", "vigencia_desde", "vigencia_hasta",
@@ -42,6 +44,7 @@ def listarOrdenes(request):
         'col': 3
     })
 
+
 class ListarOrdenes(ListView):
     template_name = 'ordenes.html'
     context_object_name = 'ordenes'
@@ -51,16 +54,19 @@ class ListarOrdenes(ListView):
     )
     paginate_by = 7
 
+
 class ListarCompanias(ListView):
     template_name = 'companias.html'
     context_object_name = 'companias'
     queryset = Companias.objects.all()
+
 
 class AgregarCompania(CreateView):
     model = Companias
     form_class = CompaniaForm
     template_name = 'actividad/companias/agregar-compania.html'
     success_url = reverse_lazy('actividad:companias')
+
 
 class EliminarCompania(DeleteView):
     model = Companias
@@ -69,6 +75,7 @@ class EliminarCompania(DeleteView):
         compania = Companias.objects.get(id=pk)
         compania.delete()
         return redirect('/actividad/companias')
+
 
 class EditarCompania(UpdateView):
     model = Companias
@@ -103,18 +110,17 @@ def productores(request):
     })
 
 
-
 def vencimiento_polizas(request):
     if request.method == "POST":
         form = VencimientoPolizasForm(request.POST)
         # fields = ("productor", "seccion", "vigencia_desde", "vigencia_hasta")
         # seccion = request.seccion
-        
+
         if form.is_valid():
             productor = request.POST.get('productor', '*')
             seccion = request.POST.get('seccion', '*')
             vigencia_desde = request.POST.get('vigencia_desde', '*')
-            vigencia_hasta = request.POST.get('vigencia_hasta',timezone.now())
+            vigencia_hasta = request.POST.get('vigencia_hasta', timezone.now())
 
             q = {}
 
@@ -123,13 +129,13 @@ def vencimiento_polizas(request):
             else:
                 vigencia_hasta = timezone.now()
                 q['vigencia_hasta__lte'] = vigencia_hasta
-                
+
             if vigencia_desde:
                 q['vigencia_desde'] = vigencia_desde
-                
+
             if seccion:
                 q['seccion'] = seccion
-                
+
             if productor:
                 q['productor'] = productor
 
@@ -138,18 +144,17 @@ def vencimiento_polizas(request):
     else:
         form = VencimientoPolizasForm()
         return render(request, 'form_polizas_vto.html', {'form': form})
-    
 
 
 def cliente_polizas(request):
     if request.method == "POST":
         form = ClientesPolizasForm(request.POST)
-        
+
         if form.is_valid():
             cliente = request.POST.get('cliente', '*')
             seccion = request.POST.get('seccion', '*')
             vigencia_desde = request.POST.get('vigencia_desde', '*')
-            vigencia_hasta = request.POST.get('vigencia_hasta',timezone.now())
+            vigencia_hasta = request.POST.get('vigencia_hasta', timezone.now())
 
             q = {}
 
@@ -158,13 +163,13 @@ def cliente_polizas(request):
             else:
                 vigencia_hasta = timezone.now()
                 q['vigencia_hasta__lte'] = vigencia_hasta
-                
+
             if vigencia_desde:
                 q['vigencia_desde'] = vigencia_desde
-                
+
             if seccion:
                 q['seccion'] = seccion
-                
+
             if cliente:
                 q['cliente'] = cliente
 
@@ -173,3 +178,53 @@ def cliente_polizas(request):
     else:
         form = ClientesPolizasForm()
         return render(request, 'form_polizas_cliente.html', {'form': form})
+
+
+def libros_rubricados(request):
+    """Libros rubricados"""
+    if request.method == "POST":
+        form = LibrosRubricadosForm(request.POST)
+
+        if form.is_valid():
+            q = {}
+            
+            if request.POST.get('encRubr') == 2:
+                if request.POST.get('rendOp') == 1:
+                    
+                    print(my_custom_sql(request.POST.get('vigencia_desde'), request.POST.get('vigencia_hasta')))
+                    
+
+            # if vigencia_hasta:
+            #     q['vigencia_hasta__lte'] = vigencia_hasta
+            # else:
+            #     vigencia_hasta = timezone.now()
+            #     q['vigencia_hasta__lte'] = vigencia_hasta
+
+            # if vigencia_desde:
+            #     q['vigencia_desde'] = vigencia_desde
+
+            # if seccion:
+            #     q['seccion'] = seccion
+
+            # if cliente:
+            #     q['cliente'] = cliente
+
+            ordenes = Ordenes.objects.filter(**q).order_by('vigencia_hasta')
+            return render(request, 'libros_rubricados.html', {'ordenes': ordenes})
+    else:
+        form = LibrosRubricadosForm()
+        return render(request, 'form_libros.html', {'form': form})
+
+
+def my_custom_sql(fecha_desde, fecha_hasta):
+    with connection.cursor() as cursor:
+        sql = "SELECT 1, pagos_cuotas.fecha, polizas.numero, companias.nombre, pagos_cuotas.importe, 0, cuotas_polizas.nro_cuota, polizas.cant_cuotas FROM polizas, companias, cuotas_polizas, pagos_cuotas WHERE polizas.id = cuotas_polizas.poliza_id AND cuotas_polizas.id = pagos_cuotas.cuota_id AND polizas.compania_id = companias.id AND pagos_cuotas.fecha BETWEEN '%s' AND '%s' UNION SELECT 2, rendiciones.fecha, polizas.numero, companias.nombre, 0, SUM(pagos_cuotas.importe), cuotas_polizas.nro_cuota, polizas.cant_cuotas FROM rendiciones, polizas, companias, pagos_cuotas, cuotas_polizas WHERE rendiciones.cuota_id = cuotas_polizas.id AND rendiciones.poliza_id = polizas.id AND polizas.id = cuotas_polizas.poliza_id AND cuotas_polizas.id = pagos_cuotas.cuota_id AND polizas.compania_id = companias.id AND rendiciones.fecha BETWEEN '%s' AND '%s' ORDER BY 2"
+
+        cursor.execute(sql,
+                       fecha_desde.date().toString('yyyy-MM-dd'),
+                       fecha_hasta.date().toString('yyyy-MM-dd'),
+                       fecha_desde.date().toString('yyyy-MM-dd'),
+                       fecha_hasta.date().toString('yyyy-MM-dd'))
+        row = cursor.fetchone()
+
+    return row

@@ -27,6 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^actividad/polizas/reporte/vto/$', views_actividad.vencimiento_polizas),
     re_path(r'^actividad/polizas/reporte/cliente/$', views_actividad.cliente_polizas),
+    re_path(r'^actividad/polizas/reporte/libros/$', views_actividad.libros_rubricados),
     # re_path(r'^actividad/$', include('actividad.urls')),
     re_path(r'^$', TemplateView.as_view(template_name='static_pages/index.html'), name='home'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
