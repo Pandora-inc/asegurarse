@@ -186,45 +186,31 @@ def libros_rubricados(request):
         form = LibrosRubricadosForm(request.POST)
 
         if form.is_valid():
-            q = {}
-            
-            if request.POST.get('encRubr') == 2:
-                if request.POST.get('rendOp') == 1:
-                    
-                    print(my_custom_sql(request.POST.get('vigencia_desde'), request.POST.get('vigencia_hasta')))
-                    
 
-            # if vigencia_hasta:
-            #     q['vigencia_hasta__lte'] = vigencia_hasta
-            # else:
-            #     vigencia_hasta = timezone.now()
-            #     q['vigencia_hasta__lte'] = vigencia_hasta
+            if int(request.POST.get('encRubr')) == 2:
+                if int(request.POST.get('rendOp')) == 1:
+                    ordenes = recuperar_rubri_rendiciones(request.POST.get(
+                        'vigencia_desde'), request.POST.get('vigencia_hasta'))
 
-            # if vigencia_desde:
-            #     q['vigencia_desde'] = vigencia_desde
-
-            # if seccion:
-            #     q['seccion'] = seccion
-
-            # if cliente:
-            #     q['cliente'] = cliente
-
-            ordenes = Ordenes.objects.filter(**q).order_by('vigencia_hasta')
             return render(request, 'libros_rubricados.html', {'ordenes': ordenes})
     else:
         form = LibrosRubricadosForm()
         return render(request, 'form_libros.html', {'form': form})
 
 
-def my_custom_sql(fecha_desde, fecha_hasta):
+def recuperar_rubri_rendiciones(fecha_desde, fecha_hasta):
     with connection.cursor() as cursor:
         sql = "SELECT 1, pagos_cuotas.fecha, polizas.numero, companias.nombre, pagos_cuotas.importe, 0, cuotas_polizas.nro_cuota, polizas.cant_cuotas FROM polizas, companias, cuotas_polizas, pagos_cuotas WHERE polizas.id = cuotas_polizas.poliza_id AND cuotas_polizas.id = pagos_cuotas.cuota_id AND polizas.compania_id = companias.id AND pagos_cuotas.fecha BETWEEN '%s' AND '%s' UNION SELECT 2, rendiciones.fecha, polizas.numero, companias.nombre, 0, SUM(pagos_cuotas.importe), cuotas_polizas.nro_cuota, polizas.cant_cuotas FROM rendiciones, polizas, companias, pagos_cuotas, cuotas_polizas WHERE rendiciones.cuota_id = cuotas_polizas.id AND rendiciones.poliza_id = polizas.id AND polizas.id = cuotas_polizas.poliza_id AND cuotas_polizas.id = pagos_cuotas.cuota_id AND polizas.compania_id = companias.id AND rendiciones.fecha BETWEEN '%s' AND '%s' ORDER BY 2"
 
-        cursor.execute(sql,
-                       fecha_desde.date().toString('yyyy-MM-dd'),
-                       fecha_hasta.date().toString('yyyy-MM-dd'),
-                       fecha_desde.date().toString('yyyy-MM-dd'),
-                       fecha_hasta.date().toString('yyyy-MM-dd'))
-        row = cursor.fetchone()
-
+        cursor.execute(sql, (
+            fecha_desde,
+            fecha_hasta,
+            fecha_desde,
+            fecha_hasta))
+        # cursor.execute(sql,(
+        #                fecha_desde.date().toString('yyyy-MM-dd'),
+        #                fecha_hasta.date().toString('yyyy-MM-dd'),
+        #                fecha_desde.date().toString('yyyy-MM-dd'),
+        #                fecha_hasta.date().toString('yyyy-MM-dd')))
+        row = cursor.fetchall()
     return row
