@@ -2,7 +2,10 @@
 import datetime
 import logging
 from django.contrib import admin
+from django.http import HttpResponse
 from django.utils.html import format_html
+from django.urls import path
+from django.urls.base import reverse
 
 from .forms import PolizasCustomForm
 
@@ -23,6 +26,7 @@ class OrdenesInline(admin.TabularInline):
 class PolizasInline(admin.TabularInline):
     model = Polizas
     extra = 0
+
 
 class CompaniasInline(admin.TabularInline):
     model = Companias
@@ -61,21 +65,22 @@ class ClientesAdmin(admin.ModelAdmin):
         })
     )
     inlines = [ClientesMediosdepagoInline, OrdenesInline, PolizasInline]
-    readonly_fields = ('button_polizas','button_ordenes','button_estado_cuenta','button_pagos', 'button_cheques')
-    
-    def button_polizas (self, request):
+    readonly_fields = ('button_polizas', 'button_ordenes',
+                       'button_estado_cuenta', 'button_pagos', 'button_cheques')
+
+    def button_polizas(self, request):
         return get_button("actividad", "polizas", request.nombre, "Polizas cliente")
 
-    def button_ordenes (self, request):
+    def button_ordenes(self, request):
         return get_button("actividad", "ordenes", request.nombre, "Ordenes cliente")
-        
-    def button_estado_cuenta (self, request):
+
+    def button_estado_cuenta(self, request):
         return get_button("actividad", "cuotas", request.nombre, "Estado de cuenta")
-        
-    def button_pagos (self, request):
+
+    def button_pagos(self, request):
         return get_button("actividad", "pagos", request.nombre, "Pagos realizados")
-        
-    def button_cheques (self, request):
+
+    def button_cheques(self, request):
         return get_button_new("actividad", "cheques", "Ingresar cheque")
 
 
@@ -181,9 +186,11 @@ class PolizasAdmin(admin.ModelAdmin):
 
 
 class CuotasAdmin(admin.ModelAdmin):
-    
-    list_display = ['fecha_venc', 'poliza', 'nro_cuota', 'get_cuotas', 'importe', 'saldo', 'get_estado']
-    search_fields = ['fecha_venc', 'poliza__numero', 'nro_cuota', 'poliza_id__cliente__nombre', 'poliza_id__cant_cuotas', 'importe', 'saldo']
+
+    list_display = ['fecha_venc', 'poliza', 'nro_cuota',
+                    'get_cuotas', 'importe', 'saldo', 'get_estado']
+    search_fields = ['fecha_venc', 'poliza__numero', 'nro_cuota',
+                     'poliza_id__cliente__nombre', 'poliza_id__cant_cuotas', 'importe', 'saldo']
 
     def get_estado(self, obj):
         # TODO Aca debe duscar el numero de cueto dentro de la tabla pagos para asegurarse de si esta paga
@@ -194,8 +201,9 @@ class CuotasAdmin(admin.ModelAdmin):
 
 
 class PagosAdmin(admin.ModelAdmin):
-    
-    list_display = ['get_vencimiento', 'get_poliza', 'cuota', 'get_cuotas', 'importe']
+
+    list_display = ['get_vencimiento', 'get_poliza',
+                    'cuota', 'get_cuotas', 'importe']
     search_fields = ['cuota__poliza_id__cliente__nombre']
 
     def get_poliza(self, obj):
@@ -205,24 +213,28 @@ class PagosAdmin(admin.ModelAdmin):
         return obj.cuota.fecha_venc
 
     def get_cuotas(self, obj):
-        return str(obj.cuota.nro_cuota) + " / " + str(obj.cuota.poliza.cant_cuotas) 
+        return str(obj.cuota.nro_cuota) + " / " + str(obj.cuota.poliza.cant_cuotas)
 
 
 class ChequesAdmin(admin.ModelAdmin):
-    
+
     list_display = ['cliente', 'fecha', 'numero', 'valor', 'banco', 'sucursal']
     search_fields = ['cliente__nombre', 'numero', 'fecha']
 
+
 class ComprobantesAdmin(admin.ModelAdmin):
-    
+
     list_display = ['numero', 'cliente', 'fecha', 'valor', 'restante', 'tipo']
-    search_fields = ['numero', 'fecha', 'valor', 'restante', 'tipo__descrip', 'cliente__nombre']
+    search_fields = ['numero', 'fecha', 'valor',
+                     'restante', 'tipo__descrip', 'cliente__nombre']
 
 
 class RendicionesAdmin(admin.ModelAdmin):
-    
+
     list_display = ['fecha', 'productor', 'fecha_cierre', 'total', 'compania']
-    search_fields = ['fecha', 'productor__nombre', 'fecha_cierre', 'total', 'compania__nombre']
+    search_fields = ['fecha', 'productor__nombre',
+                     'fecha_cierre', 'total', 'compania__nombre']
+
 
 class NuevoPolizasAdmin(admin.ModelAdmin):
     form = PolizasCustomForm
@@ -233,6 +245,28 @@ class NuevoPolizasAdmin(admin.ModelAdmin):
                      'vigencia_desde', 'vigencia_hasta']
 
 
+class MyModelAdmin(admin.ModelAdmin):
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('my_view/', self.admin_site.admin_view(self.my_view), name='my_view'),
+        ]
+        return my_urls + urls
+
+    def my_view(self, request):
+        # Aquí puedes escribir tu vista personalizada
+        # Por ejemplo, puedes renderizar una plantilla HTML
+        return HttpResponse("¡Hola desde mi vista personalizada!")
+
+    def my_view_link(self):
+        # Define el enlace y su etiqueta personalizada
+        url = reverse('admin:my_view')
+        return format_html('<a href="{}">Mi vista personalizada</a>', url)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['my_view_link'] = self.my_view_link()
+        return super().change_view(request, object_id, form_url, extra_context=extra_context)
 
 
 admin.site.site_header = "Asegurarse"
@@ -246,11 +280,11 @@ admin.site.register(Secciones, SeccionesAdmin)
 admin.site.register(Productores, ProductoresAdmin)
 # admin.site.register(Polizas, PolizasAdmin)
 admin.site.register(Cuotas, CuotasAdmin)
-
 admin.site.register(Pagos, PagosAdmin)
 admin.site.register(Cheques, ChequesAdmin)
 admin.site.register(Comprobantes, ComprobantesAdmin)
-
 admin.site.register(Rendiciones, RendicionesAdmin)
+admin.site.register(Polizas, NuevoPolizasAdmin) 
+# admin.site.register(MyModelAdmin)
 
-admin.site.register(Polizas, NuevoPolizasAdmin)
+# admin.site.unregister(Cuotas)

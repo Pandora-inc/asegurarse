@@ -191,12 +191,24 @@ def libros_rubricados(request):
                 if int(request.POST.get('rendOp')) == 1:
                     ordenes = recuperar_rubri_rendiciones(request.POST.get(
                         'vigencia_desde'), request.POST.get('vigencia_hasta'))
+                else:
+                    ordenes = recuperar_rubri_operaciones(request.POST.get(
+                        'vigencia_desde'), request.POST.get('vigencia_hasta'))
+                    
 
             return render(request, 'libros_rubricados.html', {'ordenes': ordenes})
     else:
         form = LibrosRubricadosForm()
         return render(request, 'form_libros.html', {'form': form})
 
+def recuperar_rubri_operaciones(fecha_desde, fecha_hasta):
+    with connection.cursor() as cursor:
+        print(fecha_desde, fecha_hasta)
+        sql = "SELECT ordenes.numero, polizas.fecha, polizas.vigencia_desde, polizas.vigencia_hasta, polizas.prima, clientes.nombre, clientes.direccion, companias.nombre, ordenes.direccion, ordenes.riesgo_desc, secciones.nombre, 'observaciones' FROM     polizas, ordenes, clientes, companias, secciones WHERE polizas.fecha BETWEEN '"+fecha_desde+"' AND '"+fecha_hasta+"' AND polizas.id = ordenes.poliza_id AND polizas.cliente_id = clientes.id AND polizas.compania_id = companias.id AND polizas.seccion_id = secciones.id ORDER BY polizas.fecha"
+        print(sql)
+        cursor.execute(sql)
+        ordenes = cursor.fetchall()
+        return ordenes
 
 def recuperar_rubri_rendiciones(fecha_desde, fecha_hasta):
     with connection.cursor() as cursor:
@@ -207,10 +219,6 @@ def recuperar_rubri_rendiciones(fecha_desde, fecha_hasta):
             fecha_hasta,
             fecha_desde,
             fecha_hasta))
-        # cursor.execute(sql,(
-        #                fecha_desde.date().toString('yyyy-MM-dd'),
-        #                fecha_hasta.date().toString('yyyy-MM-dd'),
-        #                fecha_desde.date().toString('yyyy-MM-dd'),
-        #                fecha_hasta.date().toString('yyyy-MM-dd')))
+        
         row = cursor.fetchall()
     return row

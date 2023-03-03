@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'panel',
     'actividad',
     'parametros',
+    'reportes',
 ]
 
 MIDDLEWARE = [
