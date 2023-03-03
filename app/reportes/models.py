@@ -1,6 +1,5 @@
 """ Modelo de datos relacionados a la actividad """
 from django.db import models
-from parametros.models import Banco, Bancosucu, Mediosdepago, Tiposdoc, Postal, Monedas, Tipospoliza, Tipospedido, Provincias, Organizador, Tipos_comprobante
 
 
 TIPOS_LIBROS = [
@@ -8,11 +7,18 @@ TIPOS_LIBROS = [
     ('Rendiciones', 'Rendiciones'),
 ]
 
+TIPOS_IMPRESION = [
+    ('Encabezados', 'Imprimir Encabezados'),
+    ('Rubricados', 'Imprimir Rubricados'),
+]
 
 class LibrosRubricados(models.Model):
+    """ Modelo para la generación de libros de rendiciones y operaciones """
     nombre = models.CharField(max_length=32)
     fecha = models.DateField(blank=True, null=True, verbose_name='Fecha',
                              help_text='Fecha de la operación', auto_now_add=True)
+    impresion = models.CharField(
+        max_length=16, choices=TIPOS_IMPRESION, verbose_name='Impresión',blank=True, null=True, )
     tipo = models.CharField(
         max_length=16, choices=TIPOS_LIBROS, verbose_name='Tipo')
     status = models.BooleanField(default=True, verbose_name='Activo')
@@ -21,6 +27,7 @@ class LibrosRubricados(models.Model):
         return str(self.nombre) + " - " + str(self.nombre)
 
     class Meta:
+        """ Meta """
         # managed = False
         db_table = 'libro_rubricados'
         verbose_name = 'libro rubricado'
@@ -29,6 +36,7 @@ class LibrosRubricados(models.Model):
 
 
 class RegistrosLibros(models.Model):
+    """ Modelo para el registro de los items de los libros de rendiciones y operaciones """
     libro = models.ForeignKey(
         LibrosRubricados, models.RESTRICT, blank=True, null=True)
     numero = models.IntegerField(
@@ -59,6 +67,7 @@ class RegistrosLibros(models.Model):
         return str(self.libro)
 
     class Meta:
+        """ Meta data del modelo """
         # managed = False
         db_table = 'registros_libros'
         verbose_name = 'registro libro'
