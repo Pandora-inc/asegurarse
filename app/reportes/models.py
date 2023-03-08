@@ -22,9 +22,14 @@ class LibrosRubricados(models.Model):
     tipo = models.CharField(
         max_length=16, choices=TIPOS_LIBROS, verbose_name='Tipo')
     status = models.BooleanField(default=True, verbose_name='Activo')
+    fecha_desde = models.DateField(blank=True, null=True)
+    fecha_hasta = models.DateField(blank=True, null=True)
+    pagina_desde = models.IntegerField(blank=True, null=True)
+    pagina_hasta = models.IntegerField(blank=True, null=True)
+    generado = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.nombre) + " - " + str(self.nombre)
+        return str(id) + " - " + str(self.nombre)
 
     class Meta:
         """ Meta """
