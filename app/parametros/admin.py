@@ -4,8 +4,19 @@ from django.contrib import admin
 
 from .models import *
 
-admin.site.register(Banco)
-admin.site.register(Bancosucu)
+
+class BancosucuInline(admin.TabularInline):
+    model = Bancosucu
+
+class BancoAdmin(admin.ModelAdmin):
+    """ Clase con las configuraciones para el Admin de Banco """
+    list_display = ['descrip']
+    search_fields = ['descrip']
+    inlines = [BancosucuInline]
+
+
+admin.site.register(Banco, BancoAdmin)
+# admin.site.register(Bancosucu)
 admin.site.register(Provincias)
 admin.site.register(Postal)
 admin.site.register(Monedas)

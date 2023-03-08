@@ -1,0 +1,36 @@
+    <div class="results">
+        <table id="result_list">
+            <thead>
+                <tr>
+                    <th scope="col"><div class="text"><span>Nro.Orden</span></div></th>
+                    <th scope="col"><div class="text"><span>Fecha Reg</span></div></th>
+                    <th scope="col"><div class="text"><span>Nombre o Razon Social</span></div></th>
+                    <th scope="col"><div class="text"><span>Domicilio</span></div></th>
+                    <th scope="col"><div class="text"><span>Ubicacion</span></div></th>
+                    <th scope="col"><div class="text"><span>Ent.Aseguradora</span></div></th>
+                    <th scope="col"><div class="text"><span>Bien a asegurar</span></div></th>
+                    <th scope="col"><div class="text"><span>Riesgo a cubrir</span></div></th>
+                    <th scope="col"><div class="text"><span>Suma a asegurar</span></div></th>
+                    <th scope="col"><div class="text"><span>Vigencia del seguro</span></div></th>
+                    <th scope="col"><div class="text"><span><div class="text">Observaciones</span></div></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for orden in ordenes %}
+                <tr>
+                    <td class="field-poliza nowrap">{{ orden.numero }}</td>
+                    <td class="field-poliza nowrap">{{ orden.f }}</td>
+                    <td class="field-poliza nowrap">{{ orden.nombre }}</td>
+                    <td class="field-poliza nowrap">{{ orden.domicilio }}</td>
+                    <td class="field-poliza nowrap">{{ orden.postal }}</td>
+                    <td class="field-poliza nowrap">{{ orden.compania }}</td>
+                    <td class="field-poliza nowrap">{{ orden.bien_asegurado }}</td>
+                    <td class="field-poliza nowrap">{{ orden.riesgo_desc }}</td>
+                    <td class="field-poliza nowrap">{{ orden.suma }}</td>
+                    <td class="field-poliza nowrap">{{ orden.vigencia_desde }} - {{ orden.vigencia_hasta }}</td>
+                    <td class="field-poliza nowrap">Observaciones</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
