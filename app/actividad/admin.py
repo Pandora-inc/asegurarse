@@ -2,6 +2,7 @@
 import datetime
 import logging
 from django.contrib import admin
+from django.forms import ModelForm, CheckboxSelectMultiple
 from django.http import HttpResponse
 from django.utils.html import format_html
 from django.urls import path
@@ -28,9 +29,9 @@ class PolizasInline(admin.TabularInline):
     extra = 0
 
 
-class CompaniasInline(admin.TabularInline):
-    model = Companias
-    extra = 0
+# class CompaniasInline(admin.TabularInline):
+#     model = Companias
+#     extra = 0
 
 
 class ClientesAdmin(admin.ModelAdmin):
@@ -64,7 +65,7 @@ class ClientesAdmin(admin.ModelAdmin):
             'fields': ('zona_cza', 'fuente', 'descrip', 'establecim')
         })
     )
-    inlines = [ClientesMediosdepagoInline, OrdenesInline, PolizasInline]
+    inlines = [ClientesMediosdepagoInline]
     readonly_fields = ('button_polizas', 'button_ordenes',
                        'button_estado_cuenta', 'button_pagos', 'button_cheques')
 
@@ -135,12 +136,19 @@ class SeccionesAdmin(admin.ModelAdmin):
     list_display = ['nombre', 'abrev']
     search_fields = ['nombre', 'abrev']
 
+# class ProductoresForm(ModelForm):
+#     class Meta:
+#         model = Productores
+#         widgets = {
+#             'companias': CheckboxSelectMultiple(),
+        # }
 
 class ProductoresAdmin(admin.ModelAdmin):
+    # form_class = ProductoresForm
     """ Clase con las configuraciones para el Admin de Productores """
     list_display = ['nombre', 'direccion']
     search_fields = ['nombre', 'direccion']
-    inlines = [CompaniasInline]
+    # inlines = [CompaniasInline]
 
 
 class PolizasAdmin(admin.ModelAdmin):

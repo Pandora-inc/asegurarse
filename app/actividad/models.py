@@ -10,7 +10,7 @@ class Companias(models.Model):
     cuit = models.CharField(max_length=13, blank=True, null=True)
     direccion = models.CharField(max_length=32, blank=True, null=True)
     telefonos = models.CharField(max_length=32, blank=True, null=True)
-    productor = models.ForeignKey('actividad.Productores', models.DO_NOTHING, blank=True, null=True)
+    # productor = models.ForeignKey('actividad.Productores', models.DO_NOTHING, blank=True, null=True)
     dias_primer_cuota = models.IntegerField(blank=True, null=True, verbose_name='Días a la primera cuota')
     liquidaciones = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, verbose_name='Liquidaciones')
     prop_iva = models.BooleanField(default=True, verbose_name='Propor. IVA en la primera cuota')
@@ -42,11 +42,11 @@ class Productores(models.Model):
     postal = models.ForeignKey('parametros.Postal', models.DO_NOTHING, blank=True, null=True)
     telefonos = models.CharField(max_length=64, blank=True, null=True)
     email = models.CharField(max_length=32, blank=True, null=True)
-    org1_id = models.IntegerField(blank=True, null=True)
-    org2_id = models.IntegerField(blank=True, null=True)
+    org1_id = models.TextField(blank=True, null=True)
+    org2_id = models.TextField(blank=True, null=True)
     ultima_orden = models.IntegerField(blank=True, null=True)
     status = models.BooleanField(default=True, verbose_name='Activo')
-    # companias = models.ManyToManyField(Companias)
+    companias = models.ManyToManyField(Companias)
 
     def __str__(self):
         return str(self.nombre)
