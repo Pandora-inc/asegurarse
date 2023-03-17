@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from django.views.generic.base import TemplateView
 
 from actividad import views as views_actividad
+from reportes import actions
 
 urlpatterns = [
     # re_path(r'^admin/polizas/reporte/$', polizas.admin_views.vencimiento_polizas, name='reporte'),
@@ -28,6 +29,7 @@ urlpatterns = [
     re_path(r'^actividad/polizas/reporte/vto/$', views_actividad.vencimiento_polizas),
     re_path(r'^actividad/polizas/reporte/cliente/$', views_actividad.cliente_polizas),
     re_path(r'^actividad/polizas/reporte/libros/$', views_actividad.libros_rubricados),
+    re_path(r'^actividad/polizas/reporte/libros_2/$', actions.colect_libro),
     # re_path(r'^actividad/$', include('actividad.urls')),
     re_path(r'^$', TemplateView.as_view(template_name='static_pages/index.html'), name='home'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

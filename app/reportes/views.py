@@ -37,7 +37,7 @@ def recuperar_rubri_operaciones(fecha_desde, fecha_hasta):
     with connection.cursor() as cursor:
         print(fecha_desde, fecha_hasta)
         sql = "SELECT ordenes.numero, polizas.fecha, polizas.vigencia_desde, polizas.vigencia_hasta, polizas.prima, clientes.nombre, clientes.direccion, companias.nombre, ordenes.direccion, ordenes.riesgo_desc, secciones.nombre, 'observaciones' FROM     polizas, ordenes, clientes, companias, secciones WHERE polizas.fecha BETWEEN '"+fecha_desde+"' AND '"+fecha_hasta+"' AND polizas.id = ordenes.poliza_id AND polizas.cliente_id = clientes.id AND polizas.compania_id = companias.id AND polizas.seccion_id = secciones.id ORDER BY polizas.fecha"
-        print(sql)
+        print (sql)
         cursor.execute(sql)
         ordenes = cursor.fetchall()
         return ordenes

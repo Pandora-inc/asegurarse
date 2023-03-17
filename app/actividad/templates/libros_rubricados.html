@@ -18,17 +18,9 @@
             <tbody>
                 {% for orden in ordenes %}
                 <tr>
-                    <td class="field-poliza nowrap">{{ orden.numero }}</td>
-                    <td class="field-poliza nowrap">{{ orden.f }}</td>
-                    <td class="field-poliza nowrap">{{ orden.nombre }}</td>
-                    <td class="field-poliza nowrap">{{ orden.domicilio }}</td>
-                    <td class="field-poliza nowrap">{{ orden.postal }}</td>
-                    <td class="field-poliza nowrap">{{ orden.compania }}</td>
-                    <td class="field-poliza nowrap">{{ orden.bien_asegurado }}</td>
-                    <td class="field-poliza nowrap">{{ orden.riesgo_desc }}</td>
-                    <td class="field-poliza nowrap">{{ orden.suma }}</td>
-                    <td class="field-poliza nowrap">{{ orden.vigencia_desde }} - {{ orden.vigencia_hasta }}</td>
-                    <td class="field-poliza nowrap">Observaciones</td>
+                    {% for element in orden %}
+                        <td class="field-poliza nowrap">{{ element }}</td> 
+                    {% endfor %}
                 </tr>
                 {% endfor %}
             </tbody>

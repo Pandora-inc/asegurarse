@@ -29,7 +29,7 @@ class LibrosRubricados(models.Model):
     generado = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(id) + " - " + str(self.nombre)
+        return str(self.id) + " - " + str(self.nombre)
 
     class Meta:
         """ Meta """
@@ -62,14 +62,13 @@ class RegistrosLibros(models.Model):
         max_length=32, help_text='Nombre de la compañia')
     orden_direccion = models.CharField(
         max_length=64, help_text='Direccion registrada de la orden. Ubicacion del riesgo')
-    riesgo_desc = models.CharField(
-        max_length=64, help_text='Descripcion del riesgo de la orden. Bien a asegurar')
+    riesgo_desc = models.TextField(help_text='Descripcion del riesgo de la orden. Bien a asegurar')
     secciones = models.CharField(
         max_length=64, help_text='Nombre de la seccion de la orden. Riesgo a cubrir')
     observaciones = models.CharField(max_length=64)
 
     def __str__(self):
-        return str(self.libro)
+        return str(self.libro) + " - " + str(self.numero) + " - " + str(self.cliente_nombre)
 
     class Meta:
         """ Meta data del modelo """

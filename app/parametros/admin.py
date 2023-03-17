@@ -9,6 +9,7 @@ class BancosucuInline(admin.TabularInline):
     model = Bancosucu
 
 class BancoAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/new_change_form.html'
     """ Clase con las configuraciones para el Admin de Banco """
     list_display = ['descrip']
     search_fields = ['descrip']

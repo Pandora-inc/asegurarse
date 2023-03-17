@@ -7,6 +7,7 @@ from reportes.models import LibrosRubricados, RegistrosLibros
 
 
 class LibrosAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/new_change_form.html'
     # añade un campo de texto para realizar la búsqueda, puedes añadir mas de un atributo
     search_fields = ['fecha', 'tipo', 'impresion']
     # añade una lista desplegable con la que podrás filtrar (activo es un atributo booleano)
@@ -34,5 +35,10 @@ class LibrosAdmin(admin.ModelAdmin):
         # return get_button("actividad", "polizas", request.nombre, "Polizas cliente")
         return format_html('<input type="submit" value="Guardar y continuar editando" name="_continue">')
 
+class RegistrosLibrosAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/new_change_form.html'
+    search_fields = ['libro', 'numero', 'fecha']
+    list_filter = ['libro']
+
 admin.site.register(LibrosRubricados, LibrosAdmin)
-admin.site.register(RegistrosLibros)
+admin.site.register(RegistrosLibros, RegistrosLibrosAdmin)

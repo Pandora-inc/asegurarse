@@ -15,16 +15,19 @@ from .models import Cheques, Clientes, Comprobantes, Cuotas, Ordenes, Companias,
 
 
 class ClientesMediosdepagoInline(admin.TabularInline):
+    change_form_template = 'admin/new_change_form.html'
     model = ClientesMediosdepago
     extra = 0
 
 
 class OrdenesInline(admin.TabularInline):
+    change_form_template = 'admin/new_change_form.html'
     model = Ordenes
     extra = 0
 
 
 class PolizasInline(admin.TabularInline):
+    change_form_template = 'admin/new_change_form.html'
     model = Polizas
     extra = 0
 
@@ -35,6 +38,7 @@ class PolizasInline(admin.TabularInline):
 
 
 class ClientesAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/new_change_form.html'
     """ Clase con las configuraciones para el Admin de clientes """
     # con esto muestras los campos que deses al mostrar la lista en admin
     list_display = ['id', 'nombre', 'direccion']
@@ -86,6 +90,7 @@ class ClientesAdmin(admin.ModelAdmin):
 
 
 class CompaniasAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/new_change_form.html'
     """ Clase con las configuraciones para el Admin de Companias """
     list_display = ['id', 'nombre', 'direccion']
     search_fields = ['id', 'direccion', 'nombre', 'razon_social']
@@ -94,6 +99,7 @@ class CompaniasAdmin(admin.ModelAdmin):
 
 
 class OrdenesAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/new_change_form.html'
     """ Clase con las configuraciones para el Admin de Ordenes """
     list_display = ['numero', 'orden_productor', 'vigencia_desde',
                     'vigencia_hasta', 'compania', 'cliente', 'productor']
@@ -132,6 +138,7 @@ class OrdenesAdmin(admin.ModelAdmin):
 
 
 class SeccionesAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/new_change_form.html'
     """ Clase con las configuraciones para el Admin de Secciones """
     list_display = ['nombre', 'abrev']
     search_fields = ['nombre', 'abrev']
@@ -144,6 +151,7 @@ class SeccionesAdmin(admin.ModelAdmin):
         # }
 
 class ProductoresAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/new_change_form.html'
     # form_class = ProductoresForm
     """ Clase con las configuraciones para el Admin de Productores """
     list_display = ['nombre', 'direccion']
@@ -152,6 +160,7 @@ class ProductoresAdmin(admin.ModelAdmin):
 
 
 class PolizasAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/new_change_form.html'
     """ Clase con las configuraciones para el Admin de Productores """
     list_display = ['numero', 'vigencia_desde', 'vigencia_hasta']
     search_fields = ['numero', 'cliente__nombre',
@@ -194,6 +203,7 @@ class PolizasAdmin(admin.ModelAdmin):
 
 
 class CuotasAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/new_change_form.html'
 
     list_display = ['fecha_venc', 'poliza', 'nro_cuota',
                     'get_cuotas', 'importe', 'saldo', 'get_estado']
@@ -209,6 +219,7 @@ class CuotasAdmin(admin.ModelAdmin):
 
 
 class PagosAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/new_change_form.html'
 
     list_display = ['get_vencimiento', 'get_poliza',
                     'cuota', 'get_cuotas', 'importe']
@@ -225,12 +236,14 @@ class PagosAdmin(admin.ModelAdmin):
 
 
 class ChequesAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/new_change_form.html'
 
     list_display = ['cliente', 'fecha', 'numero', 'valor', 'banco', 'sucursal']
     search_fields = ['cliente__nombre', 'numero', 'fecha']
 
 
 class ComprobantesAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/new_change_form.html'
 
     list_display = ['numero', 'cliente', 'fecha', 'valor', 'restante', 'tipo']
     search_fields = ['numero', 'fecha', 'valor',
@@ -238,6 +251,7 @@ class ComprobantesAdmin(admin.ModelAdmin):
 
 
 class RendicionesAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/new_change_form.html'
 
     list_display = ['fecha', 'productor', 'fecha_cierre', 'total', 'compania']
     search_fields = ['fecha', 'productor__nombre',
@@ -245,6 +259,7 @@ class RendicionesAdmin(admin.ModelAdmin):
 
 
 class NuevoPolizasAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/new_change_form.html'
     form = PolizasCustomForm
 
     ordering = ['numero']
