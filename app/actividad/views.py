@@ -9,6 +9,7 @@ from django.db import connection
 from .forms import ClientesPolizasForm, CompaniaForm, LibrosRubricadosForm, VencimientoPolizasForm
 from .models import Clientes, Companias, Secciones, Productores, Ordenes, Polizas
 
+from reportes import actions 
 
 # Create your views here.
 

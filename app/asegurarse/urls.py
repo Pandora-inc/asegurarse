@@ -22,10 +22,14 @@ from django.views.generic.base import TemplateView
 
 from actividad import views as views_actividad
 from reportes import actions
+# from modeladmin_reorder import reorder
+# from reportes import admin as admin_reportes
 
 urlpatterns = [
     # re_path(r'^admin/polizas/reporte/$', polizas.admin_views.vencimiento_polizas, name='reporte'),
     path('admin/', admin.site.urls),
+    # path('myadmin/', admin_reportes.my_admin_site.urls),
+    # path('admin/reorder/', reorder),
     re_path(r'^actividad/polizas/reporte/vto/$', views_actividad.vencimiento_polizas),
     re_path(r'^actividad/polizas/reporte/cliente/$', views_actividad.cliente_polizas),
     re_path(r'^actividad/polizas/reporte/libros/$', views_actividad.libros_rubricados),

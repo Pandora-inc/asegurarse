@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'admin_reorder',
+    'asegurarse',
     'panel',
     'actividad',
     'parametros',
@@ -53,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'admin_reorder.middleware.ModelAdminReorder',
 ]
 
 ROOT_URLCONF = 'asegurarse.urls'
@@ -135,3 +138,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "static_media")
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# ADMIN_SITE = 'reportes.admin.my_admin_site'
+
+
+
+ADMIN_REORDER = (
+    # Keep original label and models
+    {'app':'actividad', 'models': ('actividad.Clientes','actividad.Ordenes','actividad.Polizas','actividad.Comprobantes','actividad.Cheques','actividad.Rendiciones','actividad.Companias','actividad.Secciones','actividad.Productores')}, 
+    {'app': 'reportes', 'models': ('reportes.RegistrosLibros', 'reportes.LibrosRubricados')},
+    {'app': 'parametros', 'models': ('parametros.Bancos', 'parametros.Postal', 'parametros.Monedas', 'parametros.Tipospedido', 'parametros.Tipospoliza', 'parametros.Mediosdepago')},
+    'auth',
+
+)
